@@ -1,0 +1,12 @@
+{
+  "name": "nobroke-landing",
+  "version": "1.0.0",
+  "description": "Landing page NoBroke avec waitlist",
+  "scripts": {
+    "dev": "npx serve .",
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["landing", "waitlist", "finance"],
+  "author": "NoBroke",
+  "license": "UNLICENSED"
+}

@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoBroke - Transforme ta relation à l'argent en 5 min/jour</title>
+    <meta name="description" content="300 000€ perdus sur une vie par manque d'éducation financière. NoBroke rend la finance accessible à tous avec 5 minutes par jour.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#8B5CF6',
+                        accent: '#FBBF24',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+        }
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-8 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-purple-50 to-white">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center fade-in">
+                <!-- Logo centré -->
+                <div class="flex justify-center mb-6">
+                    <img src="logo.svg" alt="NoBroke" class="h-48 w-auto">
+                </div>
+                
+                <!-- Badge -->
+                <div class="inline-flex items-center space-x-2 px-4 py-2 bg-white rounded-full shadow-md mb-8">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="url(#gradient)" stroke-width="2"/>
+                        <circle cx="12" cy="12" r="4" fill="url(#gradient)"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="text-sm font-semibold text-gray-700">Lancement 2026</span>
+                </div>
+                
+                <!-- H1 -->
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+                    <span class="gradient-text">300 000€</span> perdus sur une vie<br>
+                    par manque d'éducation financière
+                </h1>
+                
+                <!-- Subtitle -->
+                <p class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">
+                    Être éduqué financièrement ne devrait pas être un privilège.
+                </p>
+                
+                <!-- Description -->
+                <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
+                    L'app d'éducation financière qui transforme ta relation à l'argent en <span class="font-semibold text-primary">5 minutes par jour</span>.
+                </p>
+                
+                <!-- CTAs -->
+                <div class="flex flex-col items-center justify-center gap-4 mb-16">
+                    <!-- Form Waitlist Hero -->
+                    <form id="waitlist-form-hero" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="w-full max-w-xl">
+                        <div class="flex flex-col sm:flex-row items-stretch gap-3 bg-white rounded-2xl p-2 shadow-xl">
+                            <input 
+                                type="email" 
+                                name="email" 
+                                required 
+                                placeholder="votre@email.com"
+                                class="flex-1 px-6 py-4 text-lg rounded-xl border-2 border-gray-200 focus:border-primary focus:outline-none transition-colors"
+                            >
+                            <button 
+                                type="submit" 
+                                class="px-8 py-4 gradient-bg text-white font-bold text-lg rounded-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap"
+                            >
+                                Rejoindre la waitlist
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Bouton En savoir plus -->
+                    <a href="#solution" class="text-primary font-semibold text-lg hover:underline transition-all duration-300 flex items-center gap-2">
+                        En savoir plus ↓
+                    </a>
+                </div>
+                
+                <!-- iPhone Mockup -->
+                <div class="relative max-w-xs mx-auto">
+                    <!-- iPhone Frame -->
+                    <div class="relative bg-black rounded-[3rem] p-3 shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                        <!-- Encoche (notch) -->
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-3xl z-20"></div>
+                        
+                        <!-- Écran -->
+                        <div class="relative bg-gradient-to-br from-blue-50 to-purple-50 rounded-[2.5rem] overflow-hidden">
+                            <!-- Status Bar -->
+                            <div class="flex justify-between items-center px-6 pt-3 pb-2 text-xs font-semibold text-gray-900">
+                                <span>9:41</span>
+                                <div class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                                    </svg>
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <!-- App Content -->
+                            <div class="px-6 py-6 min-h-[600px]">
+                                <!-- Header avec profil -->
+                                <div class="flex items-center justify-between mb-6">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-gray-900">Salut, Max 👋</h3>
+                                        <p class="text-xs text-gray-600">Continue ton parcours</p>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Stats Card -->
+                                <div class="bg-white rounded-2xl p-4 shadow-md mb-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div>
+                                            <p class="text-xs text-gray-600 mb-1">Niveau 12</p>
+                                            <div class="flex items-baseline space-x-1">
+                                                <span class="text-2xl font-black gradient-text">2 450</span>
+                                                <span class="text-xs text-gray-500">/ 3 000 XP</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-xs text-gray-600 mb-1">Série</p>
+                                            <span class="text-2xl font-black text-orange-500">7🔥</span>
+                                        </div>
+                                    </div>
+                                    <!-- Barre de progression -->
+                                    <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full gradient-bg rounded-full" style="width: 82%"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Choix du jour -->
+                                <div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-4 mb-4 relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-8 -mt-8"></div>
+                                    <div class="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-6 -mb-6"></div>
+                                    <div class="relative">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="text-white font-bold text-sm">Choix du jour</h4>
+                                            <span class="text-xs text-white/80 bg-white/20 px-2 py-1 rounded-full">+30 XP</span>
+                                        </div>
+                                        <p class="text-white/90 text-xs mb-3">Ton ami te propose d'investir dans sa startup...</p>
+                                        <button class="w-full bg-white text-primary font-semibold text-xs py-2 rounded-lg hover:shadow-lg transition-shadow">
+                                            Faire mon choix →
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Modules en cours -->
+                                <div class="mb-4">
+                                    <h4 class="text-sm font-bold text-gray-900 mb-3">Modules en cours</h4>
+                                    <div class="space-y-2">
+                                        <div class="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-lg">💰</div>
+                                                <div>
+                                                    <h5 class="text-xs font-semibold text-gray-900">Budget mensuel</h5>
+                                                    <div class="w-24 h-1 bg-gray-200 rounded-full mt-1">
+                                                        <div class="h-full bg-blue-500 rounded-full" style="width: 60%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs text-gray-500">60%</span>
+                                        </div>
+                                        
+                                        <div class="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-lg">📊</div>
+                                                <div>
+                                                    <h5 class="text-xs font-semibold text-gray-900">Épargne intelligente</h5>
+                                                    <div class="w-24 h-1 bg-gray-200 rounded-full mt-1">
+                                                        <div class="h-full bg-green-500 rounded-full" style="width: 30%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs text-gray-500">30%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Home Indicator -->
+                            <div class="flex justify-center pb-2">
+                                <div class="w-32 h-1 bg-gray-900 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problème Section -->
+    <section id="probleme" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-sm font-bold text-primary uppercase tracking-wider mb-3">Le problème</h2>
+                <h3 class="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+                    Un Français moyen perd <span class="gradient-text">300 000€</span> sur sa vie par manque d'éducation financière.
+                </h3>
+                <p class="text-lg text-gray-700 font-semibold">Voici comment :</p>
+            </div>
+            
+            <!-- Pain Points Grid -->
+            <div class="grid sm:grid-cols-2 gap-6 mb-12 fade-in">
+                <div class="bg-gradient-to-br from-red-50 to-orange-50 p-8 rounded-2xl border border-red-100 hover-lift">
+                    <div class="mb-4">
+                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none">
+                            <rect x="2" y="4" width="20" height="16" rx="2" stroke="url(#gradient1)" stroke-width="2"/>
+                            <path d="M12 8v4m0 4h.01" stroke="url(#gradient1)" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#EF4444;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#F97316;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Frais évitables</h4>
+                    <p class="text-gray-700"><span class="font-bold text-red-600">200€ par an</span> en frais bancaires qui pourraient être gratuits</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-8 rounded-2xl border border-yellow-100 hover-lift">
+                    <div class="mb-4">
+                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 17l6-6 4 4 8-8" stroke="url(#gradient2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 7h7v7" stroke="url(#gradient2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#F97316;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Épargne mal placée</h4>
+                    <p class="text-gray-700">Des milliers d'euros de rendements perdus chaque année sur des placements <span class="font-bold text-orange-600">pas optimisés</span></p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl border border-purple-100 hover-lift">
+                    <div class="mb-4">
+                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" stroke="url(#gradient3)" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2" stroke="url(#gradient3)" stroke-width="2"/>
+                            <path d="M9 2v5m6-5v5" stroke="url(#gradient3)" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#EC4899;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Crédits mal gérés</h4>
+                    <p class="text-gray-700"><span class="font-bold text-purple-600">50 000€</span> d'intérêts en trop sur un crédit immobilier mal négocié</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-2xl border border-blue-100 hover-lift">
+                    <div class="mb-4">
+                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="9" stroke="url(#gradient4)" stroke-width="2"/>
+                            <path d="M9 9h6v6H9z" stroke="url(#gradient4)" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M12 2v4m0 12v4M2 12h4m12 0h4" stroke="url(#gradient4)" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Salaire sous-négocié</h4>
+                    <p class="text-gray-700"><span class="font-bold text-blue-600">150 000€</span> de revenus en moins sur une carrière sans négociation active</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-sm font-bold text-secondary uppercase tracking-wider mb-3">La solution</h2>
+                <h3 class="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-6">
+                    NoBroke : Apprendre la finance <span class="gradient-text">aussi simplement qu'une langue</span>
+                </h3>
+            </div>
+            
+            <!-- Benefits Grid -->
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift fade-in">
+                    <div class="mb-4">
+                        <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="7" width="18" height="12" rx="2" stroke="url(#gradient-game)" stroke-width="2"/>
+                            <circle cx="8" cy="13" r="1.5" fill="url(#gradient-game)"/>
+                            <circle cx="16" cy="10" r="1.5" fill="url(#gradient-game)"/>
+                            <circle cx="16" cy="16" r="1.5" fill="url(#gradient-game)"/>
+                            <path d="M12 10v6m-3-3h6" stroke="url(#gradient-game)" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient-game" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-3">Apprentissage gamifié</h4>
+                    <p class="text-gray-600 mb-4">Niveaux, XP, badges, streaks... Apprendre devient addictif.</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            50 niveaux de progression
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Badges déblocables
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Streak quotidien
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift fade-in">
+                    <div class="mb-4">
+                        <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="9" stroke="url(#gradient-time)" stroke-width="2"/>
+                            <path d="M12 7v5l3 3" stroke="url(#gradient-time)" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient-time" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-3">5 minutes par jour</h4>
+                    <p class="text-gray-600 mb-4">Modules courts et concrets qui s'intègrent dans ton quotidien.</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            59 modules interactifs
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Quiz de validation
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Choix quotidiens
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift fade-in">
+                    <div class="mb-4">
+                        <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2l3 7h7l-5.5 4.5 2 7.5L12 17l-6.5 4 2-7.5L2 9h7l3-7z" stroke="url(#gradient-independent)" stroke-width="2" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient-independent" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-3">100% indépendant</h4>
+                    <p class="text-gray-600 mb-4">Zéro vente de produits financiers. Conseils neutres garantis.</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Aucun conflit d'intérêt
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Pas de vente de produits
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Éducation pure
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Quatrième carte : Fonctionnalités à venir -->
+            <div class="grid md:grid-cols-1 gap-8 max-w-3xl mx-auto fade-in">
+                <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift">
+                    <div class="mb-4">
+                        <svg class="w-14 h-14" viewBox="0 0 24 26" fill="none">
+                            <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" stroke="url(#gradient-future)" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M9 12l2 2 4-4" stroke="url(#gradient-future)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient-future" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-3">De nombreuses fonctionnalités à venir</h4>
+                    <p class="text-gray-600 mb-4">Copilote financier IA, communauté privée, intervention de professionnels de la finance... Une app à 360° pour maîtriser la finance.</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Assistant IA
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Communauté d'entraide
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Professionnels de la finance pour répondre à vos questions
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comment ça marche Section -->
+    <section id="comment" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-sm font-bold text-accent uppercase tracking-wider mb-3">Comment ça marche</h2>
+                <h3 class="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900">
+                    Simple comme <span class="gradient-text">1-2-3</span>
+                </h3>
+            </div>
+            
+            <!-- Steps -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="relative bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl border-2 border-primary hover-lift fade-in">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 gradient-bg rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        01
+                    </div>
+                    <div class="mt-4 mb-4">
+                        <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="url(#gradient-step1)" stroke-width="2"/>
+                            <path d="M9 12h6m-6 4h6" stroke="url(#gradient-step1)" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient-step1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-3">Évalue ton niveau</h4>
+                    <p class="text-gray-700">
+                        Quiz de 10 questions pour identifier tes forces et faiblesses. On adapte ton parcours à ton profil.
+                    </p>
+                </div>
+                
+                <div class="relative bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-2xl border-2 border-secondary hover-lift fade-in">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 gradient-bg rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        02
+                    </div>
+                    <div class="mt-4 mb-4">
+                        <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="url(#gradient-step2)" stroke-width="2" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient-step2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#6D28D9;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-3">Progresse à ton rythme</h4>
+                    <p class="text-gray-700">
+                        59 modules interactifs, système XP, badges et streaks. 5 minutes par jour suffisent pour avancer.
+                    </p>
+                </div>
+                
+                <div class="relative bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl border-2 border-green-500 hover-lift fade-in">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 gradient-bg rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        03
+                    </div>
+                    <div class="mt-4 mb-4">
+                        <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="url(#gradient-step3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient-step3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-3">Applique dans ta vie</h4>
+                    <p class="text-gray-700">
+                        Choix quotidiens basés sur des situations réelles. Prends des décisions financières éclairées chaque jour.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waitlist Section -->
+    <section id="waitlist" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary via-secondary to-purple-700">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-sm font-bold text-accent uppercase tracking-wider mb-3">Rejoins la liste d'attente</h2>
+                <h3 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-6">
+                    Sois parmi les premiers à économiser <span class="text-accent">300 000€</span>
+                </h3>
+            </div>
+            
+            <!-- Avantages -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-8 fade-in">
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-accent flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">Accès anticipé exclusif</h4>
+                            <p class="text-blue-100">Teste l'app en avant-première avant tout le monde</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-accent flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">Tarif fondateur à vie</h4>
+                            <p class="text-blue-100">-50% sur l'abonnement Premium, pour toujours</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-6 h-6 text-accent flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">Impact sur le produit</h4>
+                            <p class="text-blue-100">Tes feedbacks façonnent les prochaines fonctionnalités</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form -->
+            <div class="bg-white rounded-2xl shadow-2xl p-8 sm:p-10 fade-in">
+                <form id="waitlist-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="space-y-6">
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required 
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                            placeholder="tom@example.com"
+                        >
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="w-full py-4 gradient-bg text-white font-bold text-lg rounded-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02]"
+                    >
+                        Rejoindre la liste d'attente →
+                    </button>
+                    
+                    <p class="text-center text-sm text-gray-600">
+                        🔒 Zéro spam. 1 email/mois max.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12 fade-in">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+                    Questions <span class="gradient-text">fréquentes</span>
+                </h2>
+            </div>
+            
+            <div class="space-y-4 fade-in">
+                <div class="faq-item bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden">
+                    <button class="faq-question w-full px-6 py-5 text-left font-bold text-lg text-gray-900 hover:bg-gray-100 transition-colors flex items-center justify-between">
+                        <span>C'est gratuit ?</span>
+                        <svg class="faq-icon w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5 text-gray-700">
+                        <p>NoBroke proposera un modèle freemium. Les 32 premiers modules seront gratuits à vie. Les fonctionnalités premium (modules avancés, simulateurs IA, communauté) seront disponibles par abonnement. Les bêta-testeurs bénéficieront d'un tarif fondateur réduit à vie.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden">
+                    <button class="faq-question w-full px-6 py-5 text-left font-bold text-lg text-gray-900 hover:bg-gray-100 transition-colors flex items-center justify-between">
+                        <span>Quand est prévu le lancement ?</span>
+                        <svg class="faq-icon w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5 text-gray-700">
+                        <p>Le lancement public est prévu pour courant 2026. Une bêta fermée sera lancée début 2026 pour les premiers inscrits à la waitlist. Tu seras prévenu par email dès que tu pourras tester l'app.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden">
+                    <button class="faq-question w-full px-6 py-5 text-left font-bold text-lg text-gray-900 hover:bg-gray-100 transition-colors flex items-center justify-between">
+                        <span>C'est pour quel niveau ?</span>
+                        <svg class="faq-icon w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5 text-gray-700">
+                        <p>NoBroke s'adresse à tous, débutant absolu, intermédiaire qui veut se perfectionner ou expert qui souhaite se challenger. Le quiz initial adapte ton parcours à ton niveau. Chacun progresse à son rythme.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden">
+                    <button class="faq-question w-full px-6 py-5 text-left font-bold text-lg text-gray-900 hover:bg-gray-100 transition-colors flex items-center justify-between">
+                        <span>Combien de temps par jour ?</span>
+                        <svg class="faq-icon w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5 text-gray-700">
+                        <p>5 minutes par jour suffisent pour maintenir ton streak et progresser. Un module complet (lecture + quiz) prend 10-15 minutes. Tu peux en faire plus si tu es motivé, mais l'app est pensée pour s'intégrer dans une routine quotidienne courte.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden">
+                    <button class="faq-question w-full px-6 py-5 text-left font-bold text-lg text-gray-900 hover:bg-gray-100 transition-colors flex items-center justify-between">
+                        <span>Vous vendez des produits financiers ?</span>
+                        <svg class="faq-icon w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5 text-gray-700">
+                        <p>Non. NoBroke est 100% indépendant et à but pédagogique et éducatif. Nos modules sont neutres et objectifs, toujours dans ton intérêt, et ne constituent pas un conseil en investissement.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden">
+                    <button class="faq-question w-full px-6 py-5 text-left font-bold text-lg text-gray-900 hover:bg-gray-100 transition-colors flex items-center justify-between">
+                        <span>Disponible sur iOS et Android ?</span>
+                        <svg class="faq-icon w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5 text-gray-700">
+                        <p>Oui ! NoBroke sera disponible dès le lancement sur iOS (App Store) et Android (Google Play).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <!-- About -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.svg" alt="NoBroke" class="h-20 w-auto brightness-0 invert">
+                    </div>
+                    <p class="text-sm text-gray-400">
+                        L'éducation financière accessible à tous. 5 minutes par jour pour transformer ta vie.
+                    </p>
+                </div>
+                
+                <!-- Navigation -->
+                <div>
+                    <h4 class="text-white font-bold mb-4">Navigation</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#hero" class="hover:text-primary transition-colors">Accueil</a></li>
+                        <li><a href="#probleme" class="hover:text-primary transition-colors">Le problème</a></li>
+                        <li><a href="#solution" class="hover:text-primary transition-colors">La solution</a></li>
+                        <li><a href="#waitlist" class="hover:text-primary transition-colors">Waitlist</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Légal -->
+                <div>
+                    <h4 class="text-white font-bold mb-4">Légal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="mentions-legales.html" class="hover:text-primary transition-colors">Mentions légales</a></li>
+                        <li><a href="politique-confidentialite.html" class="hover:text-primary transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="cgu.html" class="hover:text-primary transition-colors">CGU</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Suivre -->
+                <div>
+                    <h4 class="text-white font-bold mb-4">Suivre</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="mailto:contact@nobroke.app" class="hover:text-primary transition-colors">contact@nobroke.app</a></li>
+                        <li><a href="https://www.linkedin.com/company/nobroke/" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+                <p>© 2026 NoBroke. Tous droits réservés. Fait avec 💜 pour ta liberté financière.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        // =====================================
+        // CONFIGURATION SUPABASE
+        // =====================================
+        const SUPABASE_URL = 'https://nujtymqdzhwmucfkuhgt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51anR5bXFkemh3bXVjZmt1aGd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNjAwMTksImV4cCI6MjA4NDkzNjAxOX0.LJMwRY64lA79i_YzWcmhb1d6hUEJqnJ_c7zVgUCyHjA';
+
+        // Initialiser le client Supabase
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('.faq-icon');
+                const isOpen = !answer.classList.contains('hidden');
+                
+                // Close all FAQs
+                document.querySelectorAll('.faq-answer').forEach(a => a.classList.add('hidden'));
+                document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate-180'));
+                
+                // Open clicked FAQ if it was closed
+                if (!isOpen) {
+                    answer.classList.remove('hidden');
+                    icon.classList.add('rotate-180');
+                }
+            });
+        });
+        
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Form Submission (Hero + Section)
+        const forms = [document.getElementById('waitlist-form'), document.getElementById('waitlist-form-hero')];
+        
+        forms.forEach(form => {
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const emailInput = form.querySelector('input[type="email"]');
+                    const email = emailInput.value;
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    
+                    submitBtn.textContent = 'Inscription...';
+                    submitBtn.disabled = true;
+                    
+                    try {
+                        // ✅ Envoyer à Supabase
+                        const { data, error } = await supabaseClient
+                            .from('waitlist')
+                            .insert([{ email: email }]);
+                        
+                        if (error) {
+                            // Gestion des erreurs
+                            if (error.code === '23505') {
+                                // Email déjà inscrit (duplicate key)
+                                submitBtn.textContent = '✅ Déjà inscrit !';
+                            } else {
+                                throw error;
+                            }
+                        } else {
+                            // ✅ Succès !
+                            submitBtn.textContent = '✅ Inscrit !';
+                            form.reset();
+                            
+                            // Google Analytics tracking (optionnel)
+                            if (typeof gtag !== 'undefined') {
+                                gtag('event', 'waitlist_signup', {
+                                    'event_category': 'engagement',
+                                    'event_label': 'email_signup'
+                                });
+                            }
+                        }
+                        
+                        setTimeout(() => {
+                            submitBtn.textContent = originalText;
+                            submitBtn.disabled = false;
+                        }, 3000);
+                        
+                    } catch (error) {
+                        console.error('Error:', error);
+                        submitBtn.textContent = '❌ Erreur';
+                        
+                        setTimeout(() => {
+                            submitBtn.textContent = originalText;
+                            submitBtn.disabled = false;
+                        }, 3000);
+                    }
+                });
+            }
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
