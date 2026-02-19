@@ -17,12 +17,12 @@ export interface UserProgress {
   user_id: string;
   level: number;
   xp: number;
-  xp_to_next_level: number;
-  streak_days: number;
-  last_activity_date: string;
-  total_modules_completed: number;
+  xp_to_next_level?: number;
+  streak: number; // Renommé de streak_days pour correspondre au schema
+  last_visit: string; // Renommé de last_activity_date
+  total_modules_completed?: number;
   created_at: string;
-  updated_at: string;
+  updated_at?: string;
 }
 
 export interface Module {
@@ -95,6 +95,21 @@ export interface OnboardingQuiz {
   category: string;
 }
 
+// Subscription Types
+export type SubscriptionTier = 'free' | 'premium' | 'pro';
+
+export interface SubscriptionPlan {
+  id: SubscriptionTier;
+  name: string;
+  price: {
+    monthly: number;
+    yearly: number;
+  };
+  icon: string;
+  features: string[];
+  recommended?: boolean;
+}
+
 // Navigation Types
 export type RootStackParamList = {
   Login: undefined;
@@ -105,16 +120,20 @@ export type RootStackParamList = {
   Result: { score: number; totalQuestions: number; profileData: any };
   Avatar: { level: number; xp: number; profileData: any };
   MainTabs: undefined;
+  DailyChoice: undefined;
+  ModulesList: undefined;
   ModuleDetail: { moduleId: string };
-  QuizModule: { moduleId: string };
+  ModuleQuiz: { moduleId: string };
   BadgeDetail: { badgeId: string };
+  Subscription: undefined;
 };
 
 export type TabParamList = {
   Home: undefined;
-  Learn: undefined;
+  Modules: undefined;
   Badges: undefined;
   Profile: undefined;
+  More: undefined;
 };
 
 // Store Types

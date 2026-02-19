@@ -56,13 +56,13 @@ const AvatarScreen: React.FC<AvatarScreenProps> = ({ navigation, route }) => {
       });
 
       setProgress({
-        id: '',
+        id: user.id,
         user_id: user.id,
         level,
         xp,
         xp_to_next_level: 100,
-        streak_days: 0,
-        last_activity_date: new Date().toISOString(),
+        streak: 0, // Corrigé: streak au lieu de streak_days
+        last_visit: new Date().toISOString(), // Corrigé: last_visit au lieu de last_activity_date
         total_modules_completed: 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),

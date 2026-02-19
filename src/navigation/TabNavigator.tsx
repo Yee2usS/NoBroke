@@ -2,19 +2,21 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabParamList } from '@/types';
 import HomeScreen from '@/screens/HomeScreen';
-import LearnScreen from '@/screens/LearnScreen';
+import ModulesListScreen from '@/screens/modules/ModulesListScreen';
 import BadgesScreen from '@/screens/BadgesScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
-import { View, Text } from 'react-native';
+import MoreScreen from '@/screens/MoreScreen';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-// Icônes simples en attendant l'intégration de react-native-svg
-const TabIcon: React.FC<{ name: string; focused: boolean }> = ({ name, focused }) => (
-  <View className={`w-6 h-6 items-center justify-center rounded-full ${focused ? 'bg-primary-500' : 'bg-gray-300'}`}>
-    <Text className="text-white text-xs font-bold">{name[0]}</Text>
-  </View>
-);
+const TAB_ICONS: Record<string, 'home' | 'book' | 'trophy' | 'person' | 'ellipsis-horizontal'> = {
+  Home: 'home',
+  Modules: 'book',
+  Badges: 'trophy',
+  Profile: 'person',
+  More: 'ellipsis-horizontal',
+};
 
 const TabNavigator: React.FC = () => {
   return (
@@ -42,35 +44,53 @@ const TabNavigator: React.FC = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Accueil',
-          tabBarIcon: ({ focused }) => <TabIcon name="Home" focused={focused} />,
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={TAB_ICONS.Home} size={size || 24} color={color} />
+          ),
         }}
       />
       <Tab.Screen
-        name="Learn"
-        component={LearnScreen}
+        name="Modules"
+        component={ModulesListScreen}
         options={{
-          tabBarLabel: 'Apprendre',
-          tabBarIcon: ({ focused }) => <TabIcon name="Learn" focused={focused} />,
+          tabBarLabel: 'Cours',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={TAB_ICONS.Modules} size={size || 24} color={color} />
+          ),
         }}
       />
       <Tab.Screen
         name="Badges"
         component={BadgesScreen}
         options={{
-          tabBarLabel: 'Badges',
-          tabBarIcon: ({ focused }) => <TabIcon name="Badges" focused={focused} />,
+          tabBarLabel: 'Défis',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={TAB_ICONS.Badges} size={size || 24} color={color} />
+          ),
         }}
       />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          tabBarLabel: 'Profil',
-          tabBarIcon: ({ focused }) => <TabIcon name="Profile" focused={focused} />,
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+            tabBarLabel: 'Profil',
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons name={TAB_ICONS.Profile} size={size || 24} color={color} />
+            ),
+            }}
+          />
+          <Tab.Screen
+            name="More"
+            component={MoreScreen}
+            options={{
+              tabBarLabel: 'Plus',
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons name={TAB_ICONS.More} size={size || 24} color={color} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      );
+    };
 
 export default TabNavigator;

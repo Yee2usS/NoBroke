@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface LevelProgressBarProps {
   currentLevel: number;
@@ -12,7 +13,8 @@ interface LevelProgressBarProps {
 }
 
 /**
- * Barre de progression du niveau avec animation
+ * Barre de progression du niveau avec animation et gradient
+ * Style moderne : Gradient Bleu → Violet
  */
 const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
   currentLevel,
@@ -20,19 +22,40 @@ const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
   xpForNextLevel,
   progressPercentage,
   showLabel = true,
-  height = 12,
+  height = 14,
   animated = true,
 }) => {
   const progressAnim = useRef(new Animated.Value(0)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     if (animated) {
+      // Animation de la barre
       Animated.spring(progressAnim, {
         toValue: progressPercentage,
         useNativeDriver: false,
         damping: 15,
-        stiffness: 100,
+        stiffness: 90,
+        mass: 1,
       }).start();
+
+      // Animation de pulsation si proche de 100%
+      if (progressPercentage > 90) {
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(pulseAnim, {
+              toValue: 1.05,
+              duration: 800,
+              useNativeDriver: true,
+            }),
+            Animated.timing(pulseAnim, {
+              toValue: 1,
+              duration: 800,
+              useNativeDriver: true,
+            }),
+          ])
+        ).start();
+      }
     } else {
       progressAnim.setValue(progressPercentage);
     }
@@ -43,31 +66,58 @@ const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
     outputRange: ['0%', '100%'],
   });
 
+  // Formater les nombres avec des virgules (1,234)
+  const formatNumber = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   return (
     <View style={styles.container}>
       {/* Label */}
       {showLabel && (
         <View style={styles.labelContainer}>
-          <View style={styles.levelBadge}>
-            <Text style={styles.levelText}>Niv. {currentLevel}</Text>
-          </View>
+          <LinearGradient
+            colors={['#3B82F6', '#8B5CF6']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.levelBadge}
+          >
+            <Text style={styles.levelText}>Niveau {currentLevel}</Text>
+          </LinearGradient>
           <Text style={styles.xpText}>
-            {currentXP} / {xpForNextLevel} XP
+            {formatNumber(currentXP)} / {formatNumber(xpForNextLevel)} XP
           </Text>
         </View>
       )}
 
       {/* Barre de progression */}
-      <View style={[styles.progressBar, { height }]}>
-        <Animated.View style={[styles.progressFill, { height, width: animatedWidth }]} />
-        
-        {/* Étincelles (optionnel) */}
-        {progressPercentage > 90 && (
-          <View style={styles.sparkles}>
-            <Text style={styles.sparkle}>✨</Text>
-          </View>
-        )}
-      </View>
+      <Animated.View
+        style={[
+          styles.progressBarContainer,
+          { transform: [{ scale: pulseAnim }] },
+        ]}
+      >
+        <View style={[styles.progressBar, { height }]}>
+          <Animated.View style={[styles.progressFillContainer, { width: animatedWidth }]}>
+            <LinearGradient
+              colors={['#3B82F6', '#8B5CF6']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[styles.progressFill, { height }]}
+            >
+              {/* Effet brillant */}
+              <View style={styles.shimmer} />
+            </LinearGradient>
+          </Animated.View>
+
+          {/* Étincelles si proche de 100% */}
+          {progressPercentage > 90 && (
+            <View style={styles.sparkles}>
+              <Text style={styles.sparkle}>✨</Text>
+            </View>
+          )}
+        </View>
+      </Animated.View>
 
       {/* Pourcentage */}
       {showLabel && (
@@ -85,13 +135,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   levelBadge: {
-    backgroundColor: '#6366f1',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
     borderRadius: 999,
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   levelText: {
     color: '#ffffff',
@@ -101,22 +155,45 @@ const styles = StyleSheet.create({
   xpText: {
     color: '#6b7280',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
+  },
+  progressBarContainer: {
+    width: '100%',
   },
   progressBar: {
-    backgroundColor: '#e5e7eb',
+    backgroundColor: '#E5E7EB',
     borderRadius: 999,
     overflow: 'hidden',
     position: 'relative',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  progressFillContainer: {
+    height: '100%',
+    borderRadius: 999,
+    overflow: 'hidden',
   },
   progressFill: {
-    backgroundColor: '#6366f1',
+    width: '100%',
     borderRadius: 999,
     position: 'relative',
+    overflow: 'hidden',
+  },
+  shimmer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 999,
   },
   sparkles: {
     position: 'absolute',
-    right: 8,
+    right: 10,
     top: '50%',
     transform: [{ translateY: -10 }],
   },
@@ -127,8 +204,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#9ca3af',
     fontSize: 12,
-    fontWeight: '600',
-    marginTop: 4,
+    fontWeight: '700',
+    marginTop: 6,
   },
 });
 

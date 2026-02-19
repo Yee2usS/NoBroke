@@ -22,42 +22,48 @@ export interface XPUpdateResult {
 
 /**
  * Ajoute des XP à un utilisateur et met à jour son niveau
+ * Compatible avec le nouveau schema (profiles au lieu de user_progress)
  */
 export const awardXP = async (
   userId: string,
   actionType: XPAction['type']
 ): Promise<XPUpdateResult> => {
   try {
-    // 1. Récupérer la progression actuelle
-    const { data: progressData, error: fetchError } = await supabase
-      .from('user_progress')
+    // 1. Récupérer la progression actuelle depuis profiles
+    const { data: profileData, error: fetchError } = await supabase
+      .from('profiles')
       .select('xp, level')
-      .eq('user_id', userId)
+      .eq('id', userId)
       .single();
 
     if (fetchError) throw fetchError;
-    if (!progressData) throw new Error('Progression utilisateur introuvable');
+    if (!profileData) throw new Error('Profil utilisateur introuvable');
 
     // 2. Calculer les nouveaux XP
     const xpToAdd = getXPReward(actionType);
-    const currentTotalXP = progressData.xp;
+    const currentTotalXP = profileData.xp;
     const result = addXP(currentTotalXP, xpToAdd);
 
-    // 3. Mettre à jour dans Supabase
+    // 3. Mettre à jour dans Supabase profiles
     const { error: updateError } = await supabase
-      .from('user_progress')
+      .from('profiles')
       .update({
         xp: result.newTotalXP,
         level: result.newLevel,
         updated_at: new Date().toISOString(),
       })
-      .eq('user_id', userId);
+      .eq('id', userId);
 
     if (updateError) throw updateError;
 
-    // 4. Si level up, créer une notification (optionnel)
+    // 4. Logger dans xp_history
+    await logXPHistory(userId, actionType, xpToAdd, result.newTotalXP, result.newLevel);
+
+    // 5. Si level up, créer une notification et logger
     if (result.leveledUp) {
       await createLevelUpNotification(userId, result.newLevel);
+      // Logger le level up comme action distincte
+      await logXPHistory(userId, 'level_up' as any, 0, result.newTotalXP, result.newLevel);
     }
 
     return {
@@ -83,18 +89,53 @@ export const awardXP = async (
 };
 
 /**
+ * Log les gains d'XP dans la table xp_history
+ */
+const logXPHistory = async (
+  userId: string,
+  action: XPAction['type'] | 'level_up',
+  xpGained: number,
+  totalXP: number,
+  level: number
+): Promise<void> => {
+  try {
+    const actionMap: Record<string, string> = {
+      module: 'module_complete',
+      daily_choice: 'daily_choice',
+      quiz: 'quiz_success',
+      streak_7: 'streak_7',
+      invite_friend: 'invite_friend',
+      level_up: 'level_up',
+    };
+
+    await supabase.from('xp_history').insert({
+      user_id: userId,
+      action: actionMap[action],
+      xp_gained: xpGained,
+      total_xp: totalXP,
+      level: level,
+      created_at: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Erreur lors du log XP history:', error);
+    // Ne pas bloquer l'attribution des XP si le log échoue
+  }
+};
+
+/**
  * Récupère les informations de niveau détaillées pour un utilisateur
+ * Compatible avec le nouveau schema (profiles)
  */
 export const getUserLevelInfo = async (userId: string) => {
   try {
     const { data, error } = await supabase
-      .from('user_progress')
+      .from('profiles')
       .select('xp, level')
-      .eq('user_id', userId)
+      .eq('id', userId)
       .single();
 
     if (error) throw error;
-    if (!data) throw new Error('Progression utilisateur introuvable');
+    if (!data) throw new Error('Profil utilisateur introuvable');
 
     return {
       success: true,
@@ -111,6 +152,7 @@ export const getUserLevelInfo = async (userId: string) => {
 
 /**
  * Ajoute des XP personnalisés (pour les admins ou cas spéciaux)
+ * Compatible avec le nouveau schema (profiles)
  */
 export const awardCustomXP = async (
   userId: string,
@@ -118,33 +160,45 @@ export const awardCustomXP = async (
   reason: string
 ): Promise<XPUpdateResult> => {
   try {
-    const { data: progressData, error: fetchError } = await supabase
-      .from('user_progress')
+    const { data: profileData, error: fetchError } = await supabase
+      .from('profiles')
       .select('xp, level')
-      .eq('user_id', userId)
+      .eq('id', userId)
       .single();
 
     if (fetchError) throw fetchError;
-    if (!progressData) throw new Error('Progression utilisateur introuvable');
+    if (!profileData) throw new Error('Profil utilisateur introuvable');
 
-    const result = addXP(progressData.xp, xpAmount);
+    const result = addXP(profileData.xp, xpAmount);
 
     const { error: updateError } = await supabase
-      .from('user_progress')
+      .from('profiles')
       .update({
         xp: result.newTotalXP,
         level: result.newLevel,
         updated_at: new Date().toISOString(),
       })
-      .eq('user_id', userId);
+      .eq('id', userId);
 
     if (updateError) throw updateError;
 
     // Log de l'action admin
     console.log(`XP personnalisés attribués: ${xpAmount} XP à ${userId}. Raison: ${reason}`);
 
+    // Logger dans xp_history avec metadata
+    await supabase.from('xp_history').insert({
+      user_id: userId,
+      action: 'module_complete', // Action générique pour custom XP
+      xp_gained: xpAmount,
+      total_xp: result.newTotalXP,
+      level: result.newLevel,
+      metadata: { reason },
+      created_at: new Date().toISOString(),
+    });
+
     if (result.leveledUp) {
       await createLevelUpNotification(userId, result.newLevel);
+      await logXPHistory(userId, 'level_up' as any, 0, result.newTotalXP, result.newLevel);
     }
 
     return {

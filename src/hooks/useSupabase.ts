@@ -4,6 +4,7 @@ import { useUserStore } from '@/store/useUserStore';
 
 /**
  * Hook personnalisé pour gérer l'authentification Supabase
+ * Utilise la nouvelle structure DB (profiles au lieu de users + user_progress)
  */
 export const useSupabase = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +33,7 @@ export const useSupabase = () => {
   const checkUser = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      
+
       if (session?.user) {
         await loadUserData(session.user.id);
       }
@@ -45,25 +46,36 @@ export const useSupabase = () => {
 
   const loadUserData = async (userId: string) => {
     try {
-      // Charger les données utilisateur
-      const { data: userData, error: userError } = await supabase
-        .from('users')
+      // Charger les données utilisateur depuis profiles
+      // Dans le nouveau schema, profiles contient à la fois user data et progress
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (userError) throw userError;
+      if (profileError) throw profileError;
 
-      // Charger la progression
-      const { data: progressData, error: progressError } = await supabase
-        .from('user_progress')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
+      // Séparer user et progress pour le store
+      const userData = {
+        id: profileData.id,
+        email: profileData.email,
+        username: profileData.username,
+        avatar_url: profileData.avatar_url,
+        onboarding_completed: profileData.onboarding_completed,
+        created_at: profileData.created_at,
+        updated_at: profileData.updated_at,
+      };
 
-      if (progressError && progressError.code !== 'PGRST116') {
-        throw progressError;
-      }
+      const progressData = {
+        id: profileData.id, // Même ID que le profil
+        user_id: profileData.id,
+        level: profileData.level || 1,
+        xp: profileData.xp || 0,
+        streak: profileData.streak || 0,
+        last_visit: profileData.last_visit || new Date().toISOString(),
+        created_at: profileData.created_at,
+      };
 
       setUser(userData);
       setProgress(progressData);

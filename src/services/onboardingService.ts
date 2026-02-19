@@ -18,13 +18,14 @@ export interface QuizResult {
 
 /**
  * Sauvegarder les données de profil
+ * MISE À JOUR : Utilise 'profiles' au lieu de 'users'
  */
 export const saveProfileData = async (
   userId: string,
   profileData: ProfileData
 ): Promise<void> => {
   const { error } = await supabase
-    .from('users')
+    .from('profiles')
     .update({
       age_range: profileData.age,
       income_range: profileData.income,
@@ -37,25 +38,27 @@ export const saveProfileData = async (
 
 /**
  * Sauvegarder les résultats du quiz et attribuer le niveau
+ * MISE À JOUR : Utilise 'profiles' au lieu de 'user_progress'
  */
 export const saveQuizResults = async (
   userId: string,
   result: QuizResult
 ): Promise<void> => {
-  // Mettre à jour la progression
+  // Mettre à jour le niveau et XP dans profiles
   const { error: progressError } = await supabase
-    .from('user_progress')
+    .from('profiles')
     .update({
       level: result.level,
       xp: result.xp,
     })
-    .eq('user_id', userId);
+    .eq('id', userId);
 
   if (progressError) throw progressError;
 };
 
 /**
  * Finaliser l'onboarding
+ * MISE À JOUR : Utilise 'profiles' au lieu de 'users'
  */
 export const completeOnboarding = async (
   userId: string,
@@ -70,7 +73,7 @@ export const completeOnboarding = async (
   if (avatarUrl) updates.avatar_url = avatarUrl;
 
   const { error } = await supabase
-    .from('users')
+    .from('profiles')
     .update(updates)
     .eq('id', userId);
 

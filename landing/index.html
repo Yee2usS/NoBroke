@@ -7,7 +7,7 @@
     <meta name="description" content="300 000€ perdus sur une vie par manque d'éducation financière. NoBroke rend la finance accessible à tous avec 5 minutes par jour.">
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -141,9 +141,9 @@
                         <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-3xl z-20"></div>
                         
                         <!-- Écran -->
-                        <div class="relative bg-gradient-to-br from-blue-50 to-purple-50 rounded-[2.5rem] overflow-hidden">
+                        <div class="relative bg-gradient-to-b from-[#F5F3FF] via-[#F9FAFB] to-[#EEF2FF] rounded-[2.5rem] overflow-hidden">
                             <!-- Status Bar -->
-                            <div class="flex justify-between items-center px-6 pt-3 pb-2 text-xs font-semibold text-gray-900">
+                            <div class="flex justify-between items-center px-6 pt-4 pb-2 text-xs font-semibold text-gray-900">
                                 <span>9:41</span>
                                 <div class="flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -154,95 +154,129 @@
                                     </svg>
                                 </div>
                             </div>
-                            
-                            <!-- App Content -->
-                            <div class="px-6 py-6 min-h-[600px]">
-                                <!-- Header avec profil -->
-                                <div class="flex items-center justify-between mb-6">
-                                    <div>
-                                        <h3 class="text-lg font-bold text-gray-900">Salut, Max 👋</h3>
-                                        <p class="text-xs text-gray-600">Continue ton parcours</p>
-                                    </div>
-                                    <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                                
-                                <!-- Stats Card -->
-                                <div class="bg-white rounded-2xl p-4 shadow-md mb-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <div>
-                                            <p class="text-xs text-gray-600 mb-1">Niveau 12</p>
-                                            <div class="flex items-baseline space-x-1">
-                                                <span class="text-2xl font-black gradient-text">2 450</span>
-                                                <span class="text-xs text-gray-500">/ 3 000 XP</span>
+
+                            <!-- Contenu de l'app -->
+                            <div class="px-5 pb-6">
+                                <!-- Header carte principale -->
+                                <div class="bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-sm mb-4">
+                                    <div class="flex items-start justify-between mb-3">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="relative">
+                                                <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-semibold">
+                                                    M
+                                                </div>
+                                                <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white"></span>
+                                            </div>
+                                            <div>
+                                                <p class="text-[11px] text-gray-500">Content de te revoir,</p>
+                                                <p class="text-sm font-semibold text-gray-900">Maxime</p>
                                             </div>
                                         </div>
-                                        <div class="text-right">
-                                            <p class="text-xs text-gray-600 mb-1">Série</p>
-                                            <span class="text-2xl font-black text-orange-500">7🔥</span>
+                                        <div class="px-3 py-1 rounded-full bg-amber-100 flex items-center space-x-1">
+                                            <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-amber-400 text-[10px] text-white font-bold">★</span>
+                                            <span class="text-[11px] font-semibold text-amber-700">Niveau 12</span>
                                         </div>
                                     </div>
-                                    <!-- Barre de progression -->
-                                    <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                                        <div class="h-full gradient-bg rounded-full" style="width: 82%"></div>
+
+                                    <!-- Progression XP -->
+                                    <div>
+                                        <p class="text-[10px] font-semibold text-gray-500 tracking-wide mb-1">PROGRESSION XP</p>
+                                        <div class="flex items-baseline justify-between mb-1">
+                                            <div class="flex items-baseline space-x-1">
+                                                <span class="text-sm font-bold text-gray-900">1,234</span>
+                                                <span class="text-[11px] text-gray-500">/ 2,000 XP</span>
+                                            </div>
+                                        </div>
+                                        <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-500" style="width: 55%"></div>
+                                        </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Choix du jour -->
-                                <div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-4 mb-4 relative overflow-hidden">
-                                    <div class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-8 -mt-8"></div>
-                                    <div class="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full -ml-6 -mb-6"></div>
+                                <div class="bg-gradient-to-br from-[#7C3AED] to-[#4F46E5] rounded-2xl p-4 mb-4 relative overflow-hidden">
+                                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-white/10 rounded-full"></div>
+                                    <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-white/5 rounded-full"></div>
                                     <div class="relative">
-                                        <div class="flex items-center justify-between mb-2">
-                                            <h4 class="text-white font-bold text-sm">Choix du jour</h4>
-                                            <span class="text-xs text-white/80 bg-white/20 px-2 py-1 rounded-full">+30 XP</span>
-                                        </div>
-                                        <p class="text-white/90 text-xs mb-3">Ton ami te propose d'investir dans sa startup...</p>
-                                        <button class="w-full bg-white text-primary font-semibold text-xs py-2 rounded-lg hover:shadow-lg transition-shadow">
-                                            Faire mon choix →
+                                        <p class="text-[10px] font-semibold text-indigo-100 uppercase tracking-wide mb-1">CHOIX DU JOUR</p>
+                                        <h3 class="text-[13px] font-semibold text-white mb-1 leading-snug">
+                                            L'Investissement Immo : Studio ou T3 ?
+                                        </h3>
+                                        <p class="text-[11px] text-indigo-100/90 mb-3 leading-snug">
+                                            Tu hérites de 50k€. Quel est le meilleur levier pour ton premier achat locatif ?
+                                        </p>
+                                        <button class="w-full bg-white text-indigo-600 font-semibold text-[11px] py-2 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                                            Relever le défi
                                         </button>
                                     </div>
                                 </div>
-                                
-                                <!-- Modules en cours -->
-                                <div class="mb-4">
-                                    <h4 class="text-sm font-bold text-gray-900 mb-3">Modules en cours</h4>
-                                    <div class="space-y-2">
-                                        <div class="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-lg">💰</div>
-                                                <div>
-                                                    <h5 class="text-xs font-semibold text-gray-900">Budget mensuel</h5>
-                                                    <div class="w-24 h-1 bg-gray-200 rounded-full mt-1">
-                                                        <div class="h-full bg-blue-500 rounded-full" style="width: 60%"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <span class="text-xs text-gray-500">60%</span>
+
+                                <!-- Stats 2x2 -->
+                                <div class="grid grid-cols-2 gap-2 mb-4">
+                                    <div class="bg-white rounded-xl p-3 shadow-sm">
+                                        <p class="text-[10px] text-gray-500 mb-1">Jours de série</p>
+                                        <p class="text-lg font-semibold text-gray-900">12</p>
+                                    </div>
+                                    <div class="bg-white rounded-xl p-3 shadow-sm">
+                                        <p class="text-[10px] text-gray-500 mb-1">Modules finis</p>
+                                        <p class="text-lg font-semibold text-gray-900">23<span class="text-[11px] text-gray-400">/59</span></p>
+                                    </div>
+                                    <div class="bg-white rounded-xl p-3 shadow-sm">
+                                        <p class="text-[10px] text-gray-500 mb-1">Badges gagnés</p>
+                                        <p class="text-lg font-semibold text-gray-900">8</p>
+                                    </div>
+                                    <div class="bg-white rounded-xl p-3 shadow-sm">
+                                        <p class="text-[10px] text-gray-500 mb-1">Classement global</p>
+                                        <p class="text-lg font-semibold text-gray-900">Top 15%</p>
+                                    </div>
+                                </div>
+
+                                <!-- Continuer -->
+                                <div class="mb-5">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="text-[11px] font-semibold text-gray-800">Continuer</p>
+                                        <button class="text-[11px] font-semibold text-indigo-500">Voir tout</button>
+                                    </div>
+                                    <div class="bg-white rounded-2xl p-3 shadow-sm flex items-center space-x-3">
+                                        <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center">
+                                            <span class="text-xs">💳</span>
                                         </div>
-                                        
-                                        <div class="bg-white rounded-xl p-3 shadow-sm flex items-center justify-between">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center text-lg">📊</div>
-                                                <div>
-                                                    <h5 class="text-xs font-semibold text-gray-900">Épargne intelligente</h5>
-                                                    <div class="w-24 h-1 bg-gray-200 rounded-full mt-1">
-                                                        <div class="h-full bg-green-500 rounded-full" style="width: 30%"></div>
-                                                    </div>
-                                                </div>
+                                        <div class="flex-1">
+                                            <p class="text-[11px] font-semibold text-gray-900 mb-1">Budget &amp; Épargne</p>
+                                            <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full rounded-full bg-indigo-500" style="width: 80%"></div>
                                             </div>
-                                            <span class="text-xs text-gray-500">30%</span>
                                         </div>
+                                        <span class="text-[11px] font-semibold text-gray-600">80%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Barre de navigation -->
+                                <div class="bg-white/90 backdrop-blur-md rounded-3xl px-6 py-2.5 flex items-center justify-between text-[10px] text-gray-500 shadow-sm">
+                                    <div class="flex flex-col items-center text-indigo-600">
+                                        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-indigo-50 mb-0.5">
+                                            <span class="text-[14px]">⌂</span>
+                                        </div>
+                                        <span class="font-semibold">Accueil</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="mb-0.5 text-[16px]">📚</span>
+                                        <span>Cours</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="mb-0.5 text-[16px]">🎯</span>
+                                        <span>Défis</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="mb-0.5 text-[16px]">👤</span>
+                                        <span>Profil</span>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Home Indicator -->
-                            <div class="flex justify-center pb-2">
-                                <div class="w-32 h-1 bg-gray-900 rounded-full"></div>
+                            <div class="flex justify-center pb-3 pt-1">
+                                <div class="w-24 h-1 rounded-full bg-black/70"></div>
                             </div>
                         </div>
                     </div>

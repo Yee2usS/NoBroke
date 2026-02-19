@@ -26,7 +26,7 @@ BEGIN
                 <table style="max-width:600px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 4px 6px rgba(0,0,0,0.1);overflow:hidden">
                     <tr>
                         <td style="background:linear-gradient(135deg,#3B82F6 0%,#8B5CF6 100%);padding:40px 30px;text-align:center">
-                            <img src="https://landing-blond-alpha.vercel.app/logo.png" alt="NoBroke" style="height:120px;width:auto;margin:0 0 20px">
+                            <img src="https://nobroke.app/logo.png" alt="NoBroke" style="height:100px;width:auto;margin:0 0 20px">
                             <h1 style="margin:0;color:#fff;font-size:32px;font-weight:900">Bienvenue sur NoBroke !</h1>
                             <p style="margin:10px 0 0;color:#E0E7FF;font-size:16px">Tu es désormais sur la liste d''attente</p>
                         </td>
@@ -36,17 +36,17 @@ BEGIN
                             <p style="margin:0 0 20px;color:#1F2937;font-size:16px;line-height:1.6">Hey 👋</p>
                             <p style="margin:0 0 20px;color:#1F2937;font-size:16px;line-height:1.6">Merci de rejoindre l''aventure NoBroke ! Tu fais maintenant partie des <strong>premiers inscrits</strong> qui vont transformer leur relation à l''argent.</p>
                             <p style="margin:0 0 30px;color:#1F2937;font-size:16px;line-height:1.6"><strong style="color:#3B82F6">300 000€</strong>, c''est le montant moyen qu''un Français perd sur sa vie par manque d''éducation financière. Avec NoBroke, on va changer ça. Ensemble.</p>
-                            <table style="width:100%;background:linear-gradient(135deg,#EFF6FF 0%,#F3E8FF 100%);border-radius:12px;border-left:4px solid #8B5CF6;padding:20px;margin:0 0 30px">
+                            <table style="width:100%;background-color:#F3F4F6;border-radius:12px;border-left:4px solid #8B5CF6;padding:20px;margin:0 0 30px">
                                 <tr>
                                     <td>
-                                        <h3 style="margin:0 0 12px;color:#1F2937;font-size:18px;font-weight:700">✨ Ce qui t''attend</h3>
-                                        <ul style="margin:0;padding:0 0 0 20px;color:#4B5563;font-size:14px;line-height:1.8">
-                                            <li>Accès anticipé à la <strong>bêta fermée</strong> (début 2026)</li>
-                                            <li>La possibilité de façonner l''application grâce à tes précieux retours</li>
-                                            <li>Des modules d''apprentissage gamifiées</li>
-                                            <li>Quiz personnalisés selon ton niveau</li>
-                                            <li>Simulations et choix quotidiens</li>
-                                            <li>Une communauté privée</li>
+                                        <h3 style="margin:0 0 12px;color:#1F2937 !important;font-size:18px;font-weight:700">✨ Ce qui t''attend</h3>
+                                        <ul style="margin:0;padding:0 0 0 20px;color:#1F2937 !important;font-size:14px;line-height:1.8">
+                                            <li style="color:#1F2937 !important">Accès anticipé à la <strong>bêta fermée</strong> (début 2026)</li>
+                                            <li style="color:#1F2937 !important">La possibilité de façonner l''application grâce à tes précieux retours</li>
+                                            <li style="color:#1F2937 !important">Des modules d''apprentissage gamifiées</li>
+                                            <li style="color:#1F2937 !important">Quiz personnalisés selon ton niveau</li>
+                                            <li style="color:#1F2937 !important">Simulations et choix quotidiens</li>
+                                            <li style="color:#1F2937 !important">Une communauté privée</li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -65,7 +65,12 @@ BEGIN
                     </tr>
                     <tr>
                         <td style="padding:30px;background:#F9FAFB;text-align:center">
-                            <p style="margin:0 0 12px;color:#6B7280;font-size:12px">Tu reçois cet email car tu t''es inscrit sur <a href="https://landing-blond-alpha.vercel.app" style="color:#3B82F6;text-decoration:none">nobroke.app</a></p>
+                            <p style="margin:0 0 12px;color:#6B7280;font-size:12px">Tu reçois cet email car tu t''es inscrit sur <a href="https://nobroke.app" style="color:#3B82F6;text-decoration:none">nobroke.app</a></p>
+                            <p style="margin:0 0 12px;color:#9CA3AF;font-size:11px">
+                                <a href="https://nobroke.app/politique-confidentialite.html" style="color:#6B7280;text-decoration:underline">Politique de confidentialité</a> • 
+                                <a href="https://nobroke.app/cgu.html" style="color:#6B7280;text-decoration:underline">CGU</a> • 
+                                <a href="https://nobroke.app/mentions-legales.html" style="color:#6B7280;text-decoration:underline">Mentions légales</a>
+                            </p>
                             <p style="margin:0;color:#9CA3AF;font-size:11px">© 2026 NoBroke. Tous droits réservés.</p>
                         </td>
                     </tr>
@@ -86,7 +91,7 @@ BEGIN
     ],
     'application/json',
     json_build_object(
-      'from', 'NoBroke <onboarding@resend.dev>',
+      'from', 'NoBroke <contact@nobroke.app>',
       'to', ARRAY[NEW.email],
       'subject', '🎉 Bienvenue sur NoBroke !',
       'html', email_html

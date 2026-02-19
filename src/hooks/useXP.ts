@@ -2,14 +2,15 @@ import { useState, useCallback } from 'react';
 import { useUserStore } from '@/store/useUserStore';
 import { awardXP, getUserLevelInfo } from '@/services/xpService';
 import { calculateLevelInfo, XPAction } from '@/utils/xpCalculator';
-import { Alert } from 'react-native';
 
 /**
- * Hook personnalisé pour gérer les XP et niveaux
+ * Hook personnalisé pour gérer les XP et niveaux avec modal de level up
  */
 export const useXP = () => {
   const { user, progress, setProgress, updateProgress } = useUserStore();
   const [isAwarding, setIsAwarding] = useState(false);
+  const [levelUpModalVisible, setLevelUpModalVisible] = useState(false);
+  const [levelUpData, setLevelUpData] = useState<{ newLevel: number; levelsGained: number } | null>(null);
 
   /**
    * Récupère les informations de niveau actuelles
@@ -23,7 +24,7 @@ export const useXP = () => {
    * Attribue des XP pour une action
    */
   const awardXPForAction = useCallback(
-    async (actionType: XPAction['type'], showNotification: boolean = true) => {
+    async (actionType: XPAction['type'], showModal: boolean = true) => {
       if (!user?.id) {
         console.error('Utilisateur non connecté');
         return null;
@@ -41,19 +42,22 @@ export const useXP = () => {
             level: result.newLevel,
           });
 
-          // Afficher une notification si level up
-          if (result.leveledUp && showNotification) {
-            showLevelUpNotification(result.newLevel, result.levelsGained);
+          // Afficher le modal si level up
+          if (result.leveledUp && showModal) {
+            setLevelUpData({
+              newLevel: result.newLevel,
+              levelsGained: result.levelsGained,
+            });
+            setLevelUpModalVisible(true);
           }
 
           return result;
         } else {
-          Alert.alert('Erreur', result.error || 'Impossible d\'attribuer les XP');
+          console.error('Erreur XP:', result.error);
           return null;
         }
       } catch (error: any) {
         console.error('Erreur dans useXP:', error);
-        Alert.alert('Erreur', 'Une erreur est survenue');
         return null;
       } finally {
         setIsAwarding(false);
@@ -63,21 +67,20 @@ export const useXP = () => {
   );
 
   /**
-   * Affiche une alerte de level up
+   * Affiche le modal de level up manuellement
    */
-  const showLevelUpNotification = (newLevel: number, levelsGained: number) => {
-    const message =
-      levelsGained > 1
-        ? `Tu as gravi ${levelsGained} niveaux ! Tu es maintenant niveau ${newLevel} ! 🎉`
-        : `Félicitations ! Tu es passé au niveau ${newLevel} ! 🎉`;
+  const showLevelUpModal = useCallback((newLevel: number, levelsGained: number = 1) => {
+    setLevelUpData({ newLevel, levelsGained });
+    setLevelUpModalVisible(true);
+  }, []);
 
-    Alert.alert('Level Up ! 🎊', message, [
-      {
-        text: 'Génial !',
-        style: 'default',
-      },
-    ]);
-  };
+  /**
+   * Ferme le modal de level up
+   */
+  const closeLevelUpModal = useCallback(() => {
+    setLevelUpModalVisible(false);
+    setLevelUpData(null);
+  }, []);
 
   /**
    * Rafraîchit les données de niveau depuis Supabase
@@ -90,6 +93,7 @@ export const useXP = () => {
       if (result.success && result.levelInfo) {
         updateProgress({
           level: result.levelInfo.currentLevel,
+          xp: result.levelInfo.currentXP + result.levelInfo.xpForCurrentLevel,
         });
       }
     } catch (error) {
@@ -103,6 +107,12 @@ export const useXP = () => {
     isAwarding,
     currentLevel: progress?.level || 1,
     currentXP: progress?.xp || 0,
+
+    // Modal Level Up
+    levelUpModalVisible,
+    levelUpData,
+    showLevelUpModal,
+    closeLevelUpModal,
 
     // Actions
     awardXPForAction,
