@@ -8,6 +8,7 @@ import Navigation from './src/navigation';
 import { useSupabase } from './src/hooks/useSupabase';
 import { ActivityIndicator, StyleSheet, Text } from 'react-native';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
+import { Analytics } from '@vercel/analytics/react';
 
 // Fix scroll sur web : le template Expo a overflow:hidden, on injecte les styles nécessaires
 function useWebScrollFix() {
@@ -38,10 +39,13 @@ export default function AppWeb() {
 
   return (
     <ErrorBoundary>
-      <View style={styles.root}>
-        <StatusBar style="auto" />
-        <Navigation />
-      </View>
+      <>
+        <View style={styles.root}>
+          <StatusBar style="auto" />
+          <Navigation />
+        </View>
+        <Analytics />
+      </>
     </ErrorBoundary>
   );
 }
