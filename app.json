@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "NoBroke",
+    "platforms": ["ios", "android", "web"],
     "slug": "nobroke-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,6 +15,9 @@
     },
     "android": {
       "package": "com.nobroke.app"
+    },
+    "web": {
+      "bundler": "metro"
     },
     "plugins": [
       "expo-secure-store"

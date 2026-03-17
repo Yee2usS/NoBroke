@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   ActivityIndicator,
-  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList } from '@/types';
 import { useModules } from '@/hooks/useModules';
@@ -24,10 +25,19 @@ type NavigationProp = StackNavigationProp<RootStackParamList>;
 const ModulesListScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const { progress } = useUserStore();
-  const { modules, loading, stats, getModulesByZone } = useModules();
-  const { canAccessPremium } = useSubscription();
+  // useSubscription est la source de vérité — quand il change, useModules se recharge automatiquement
+  const { subscription, canAccessPremium, refresh: refreshSubscription } = useSubscription();
+  const { modules, loading, stats, getModulesByZone } = useModules(subscription);
   const [expandedZones, setExpandedZones] = useState<number[]>([1]);
   const [paywallVisible, setPaywallVisible] = useState(false);
+
+  // Quand on revient sur cet écran (ex: après upgrade), rafraîchir l'abonnement.
+  // Quand subscription change, useModules se rechargera automatiquement via son useEffect.
+  useFocusEffect(
+    useCallback(() => {
+      refreshSubscription();
+    }, [refreshSubscription])
+  );
 
   const totalModules = stats?.totalModules ?? modules.length;
   const completedCount = stats?.completedModules ?? 0;
@@ -43,7 +53,11 @@ const ModulesListScreen: React.FC = () => {
   const handleModulePress = (moduleId: string) => {
     const module = modules.find((m) => m.id === moduleId);
 
-    if (module?.isPremium && !canAccessPremium) {
+    // Verrouillé par niveau → pas encore accessible, rien à faire
+    if (module?.locked) return;
+
+    // Verrouillé par premium (contenu réservé aux abonnés) → afficher le paywall
+    if (module?.premiumLocked) {
       setPaywallVisible(true);
       return;
     }

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface QuizQuestionProps {
   question: string;
@@ -25,87 +26,81 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   const [showResult, setShowResult] = useState(false);
 
   const handleSelectOption = (index: number) => {
-    if (showResult) return; // Empêcher de répondre 2 fois
+    if (showResult) return;
 
     setSelectedIndex(index);
     setShowResult(true);
 
     const isCorrect = index === correctAnswer;
 
-    // Appeler le callback après un délai
     setTimeout(() => {
       onAnswer(index, isCorrect);
-    }, 1500);
+    }, 700);
   };
 
-  const getDifficultyColor = () => {
+  const getDifficultyConfig = () => {
     switch (difficulty) {
       case 'easy':
-        return '#10b981';
+        return { label: 'Facile', color: '#34d399', bg: 'rgba(52,211,153,0.2)' };
       case 'medium':
-        return '#f59e0b';
+        return { label: 'Moyen', color: '#fbbf24', bg: 'rgba(251,191,36,0.2)' };
       case 'hard':
-        return '#ef4444';
+        return { label: 'Difficile', color: '#f87171', bg: 'rgba(248,113,113,0.2)' };
       default:
-        return '#6b7280';
+        return { label: '', color: '#6b7280', bg: 'rgba(107,114,128,0.2)' };
     }
   };
 
-  const getDifficultyLabel = () => {
-    switch (difficulty) {
-      case 'easy':
-        return 'Facile';
-      case 'medium':
-        return 'Moyen';
-      case 'hard':
-        return 'Difficile';
-      default:
-        return '';
-    }
-  };
+  const diff = getDifficultyConfig();
 
   return (
     <View style={styles.container}>
-      {/* Difficulty Badge */}
-      <View style={[styles.difficultyBadge, { backgroundColor: getDifficultyColor() }]}>
-        <Text style={styles.difficultyText}>{getDifficultyLabel()}</Text>
+      {/* Badge difficulté */}
+      <View style={[styles.diffBadge, { backgroundColor: diff.bg, borderColor: diff.color }]}>
+        <Text style={[styles.diffText, { color: diff.color }]}>{diff.label}</Text>
       </View>
 
       {/* Question */}
       <Text style={styles.question}>{question}</Text>
 
       {/* Options */}
-      <View style={styles.optionsContainer}>
+      <View style={styles.options}>
         {options.map((option, index) => {
           const isSelected = selectedIndex === index;
           const isCorrectOption = index === correctAnswer;
           const showCorrect = showResult && isCorrectOption;
           const showIncorrect = showResult && isSelected && !isCorrectOption;
 
+          let optionStyle = styles.option;
+          if (showCorrect) optionStyle = [styles.option, styles.optionCorrect];
+          else if (showIncorrect) optionStyle = [styles.option, styles.optionIncorrect];
+          else if (isSelected) optionStyle = [styles.option, styles.optionSelected];
+
           return (
             <TouchableOpacity
               key={index}
-              style={[
-                styles.optionButton,
-                isSelected && styles.optionButtonSelected,
-                showCorrect && styles.optionButtonCorrect,
-                showIncorrect && styles.optionButtonIncorrect,
-              ]}
+              style={optionStyle}
               onPress={() => handleSelectOption(index)}
               disabled={showResult}
               activeOpacity={0.8}
             >
               <View style={styles.optionContent}>
-                <Text
-                  style={[
-                    styles.optionText,
-                    (isSelected || showCorrect || showIncorrect) && styles.optionTextBold,
-                  ]}
-                >
+                <Text style={[
+                  styles.optionText,
+                  (showCorrect || showIncorrect) && styles.optionTextResult,
+                ]}>
                   {option}
                 </Text>
-                {showCorrect && <Text style={styles.resultEmoji}>✅</Text>}
-                {showIncorrect && <Text style={styles.resultEmoji}>❌</Text>}
+                {showCorrect && (
+                  <View style={styles.resultIcon}>
+                    <Ionicons name="checkmark-circle" size={22} color="#34d399" />
+                  </View>
+                )}
+                {showIncorrect && (
+                  <View style={styles.resultIcon}>
+                    <Ionicons name="close-circle" size={22} color="#f87171" />
+                  </View>
+                )}
               </View>
             </TouchableOpacity>
           );
@@ -116,50 +111,45 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    paddingHorizontal: 24,
-  },
-  difficultyBadge: {
+  container: { width: '100%' },
+
+  diffBadge: {
     alignSelf: 'flex-start',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 999,
+    borderRadius: 10,
+    borderWidth: 1,
     marginBottom: 20,
   },
-  difficultyText: {
-    color: '#ffffff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
+  diffText: { fontSize: 12, fontWeight: '700' },
+
   question: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontWeight: '700',
     color: '#ffffff',
-    marginBottom: 32,
-    lineHeight: 32,
+    lineHeight: 30,
+    marginBottom: 28,
   },
-  optionsContainer: {
-    gap: 16,
-  },
-  optionButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+
+  options: { gap: 12 },
+  option: {
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderRadius: 16,
-    padding: 20,
-    borderWidth: 2,
-    borderColor: 'transparent',
+    padding: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
   },
-  optionButtonSelected: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    borderColor: '#ffffff',
+  optionSelected: {
+    backgroundColor: 'rgba(129,140,248,0.15)',
+    borderColor: '#818cf8',
   },
-  optionButtonCorrect: {
-    backgroundColor: '#10b981',
-    borderColor: '#10b981',
+  optionCorrect: {
+    backgroundColor: 'rgba(52,211,153,0.2)',
+    borderColor: '#34d399',
   },
-  optionButtonIncorrect: {
-    backgroundColor: '#ef4444',
-    borderColor: '#ef4444',
+  optionIncorrect: {
+    backgroundColor: 'rgba(248,113,113,0.2)',
+    borderColor: '#f87171',
   },
   optionContent: {
     flexDirection: 'row',
@@ -167,17 +157,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   optionText: {
-    fontSize: 16,
-    color: '#ffffff',
+    fontSize: 15,
+    color: 'rgba(255,255,255,0.9)',
     flex: 1,
+    lineHeight: 22,
   },
-  optionTextBold: {
-    fontWeight: '600',
-  },
-  resultEmoji: {
-    fontSize: 24,
-    marginLeft: 12,
-  },
+  optionTextResult: { fontWeight: '600' },
+  resultIcon: { marginLeft: 12 },
 });
 
 export default QuizQuestion;

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoBroke – Maquettes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f172a;
+      min-height: 100vh;
+      color: white;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      padding: 48px 48px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .logo { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .logo-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .logo-name { font-size: 24px; font-weight: 900; }
+    .header-sub { font-size: 14px; color: rgba(255,255,255,0.4); }
+
+    /* ─── MAIN GRID ─── */
+    main {
+      padding: 48px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 32px;
+    }
+
+    .screen-card {
+      background: #1e293b;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      text-decoration: none;
+      display: block;
+    }
+    .screen-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+      border-color: rgba(99,102,241,0.4);
+    }
+
+    .card-preview {
+      height: 240px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Colored gradient backgrounds per screen */
+    .preview-home { background: linear-gradient(160deg, #e8eaf6 0%, #dde1f8 100%); }
+    .preview-learn { background: linear-gradient(160deg, #eef2ff 0%, #e0e7ff 100%); }
+    .preview-daily { background: linear-gradient(160deg, #0f172a 0%, #1e1b4b 100%); }
+    .preview-profile { background: linear-gradient(160deg, #4f46e5 0%, #7c3aed 60%, #e8eaf6 60%); }
+
+    .preview-phone {
+      width: 160px;
+      height: 310px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.2);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    /* Miniature phone content placeholders */
+    .mini-header {
+      height: 40px;
+      padding: 8px 10px 0;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .mini-dot { width: 24px; height: 6px; border-radius: 3px; }
+    .mini-avatar { width: 18px; height: 18px; border-radius: 5px; }
+    .mini-card {
+      margin: 6px 8px;
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .mini-bar { height: 5px; border-radius: 3px; margin: 4px 0; }
+    .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 4px 8px; }
+    .mini-cell { height: 36px; border-radius: 8px; }
+    .mini-text { height: 6px; border-radius: 3px; margin: 3px 8px; }
+    .mini-text-sm { height: 4px; border-radius: 2px; margin: 2px 8px; }
+
+    .card-info { padding: 20px 22px 22px; }
+    .card-tag {
+      display: inline-block;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 10px; font-weight: 700; color: #a5b4fc;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .card-title { font-size: 20px; font-weight: 800; color: white; margin-bottom: 6px; }
+    .card-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; margin-bottom: 14px; }
+    .card-features { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .feature-tag {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 11px; color: rgba(255,255,255,0.5);
+    }
+    .card-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border: none;
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 700; color: white;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 24px 48px 40px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-text { font-size: 13px; color: rgba(255,255,255,0.3); }
+    .footer-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 12px; color: rgba(255,255,255,0.4);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">💸</div>
+    <div class="logo-name">NoBroke</div>
+  </div>
+  <div class="header-sub">Maquettes UI · 4 écrans · Février 2025</div>
+</header>
+
+<main>
+
+  <!-- Home -->
+  <a href="home.html" class="screen-card">
+    <div class="card-preview preview-home">
+      <div class="preview-phone">
+        <div class="mini-header">
+          <div class="mini-dot" style="background:rgba(99,102,241,0.3);"></div>
+          <div class="mini-avatar" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);"></div>
+        </div>
+        <div class="mini-card" style="background:linear-gradient(135deg,#6366f1,#8b5cf6); height:52px;">
+          <div class="mini-bar" style="background:rgba(255,255,255,0.2); width:60%;"></div>
+          <div class="mini-bar" style="background:rgba(251,191,36,0.7); width:68%;"></div>
+        </div>
+        <div class="mini-grid">
+          <div class="mini-cell" style="background:white; opacity:0.9;"></div>
+          <div class="mini-cell" style="background:white; opacity:0.9;"></div>
+          <div class="mini-cell" style="background:white; opacity:0.9;"></div>
+          <div class="mini-cell" style="background:white; opacity:0.9;"></div>
+        </div>
+        <div class="mini-card" style="background:#0f172a; height:44px;">
+          <div class="mini-bar" style="background:rgba(165,180,252,0.3); width:50%;"></div>
+        </div>
+        <div class="mini-text" style="background:rgba(99,102,241,0.15); width:80%;"></div>
+        <div class="mini-text" style="background:rgba(99,102,241,0.1); width:55%;"></div>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-tag">Écran 1</div>
+      <div class="card-title">🏠 Accueil</div>
+      <div class="card-desc">Dashboard principal avec progression XP, stats, défi du jour et modules en cours.</div>
+      <div class="card-features">
+        <span class="feature-tag">Carte XP gradient</span>
+        <span class="feature-tag">Stats 2×2</span>
+        <span class="feature-tag">Daily Choice</span>
+        <span class="feature-tag">Modules scroll</span>
+        <span class="feature-tag">Badges récents</span>
+      </div>
+      <a href="home.html" class="card-btn">Voir la maquette →</a>
+    </div>
+  </a>
+
+  <!-- Learn -->
+  <a href="learn.html" class="screen-card">
+    <div class="card-preview preview-learn">
+      <div class="preview-phone">
+        <div class="mini-header">
+          <div class="mini-dot" style="background:rgba(99,102,241,0.3);"></div>
+          <div class="mini-avatar" style="background:#6366f1; width:16px; height:16px; border-radius:5px;"></div>
+        </div>
+        <div class="mini-card" style="background:#0f172a; height:32px; display:flex; align-items:center; gap:8px;">
+          <div style="font-size:10px;">🎯</div>
+          <div style="flex:1;">
+            <div class="mini-bar" style="background:rgba(255,255,255,0.2); width:100%;"></div>
+          </div>
+        </div>
+        <div class="mini-card" style="background:white; height:42px; display:flex; align-items:center; gap:6px; opacity:0.9;">
+          <div style="width:16px; height:16px; background:#d1fae5; border-radius:5px; flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div class="mini-bar" style="background:#e2e8f0; width:90%;"></div>
+            <div class="mini-bar" style="background:#10b981; width:100%;"></div>
+          </div>
+        </div>
+        <div class="mini-card" style="background:white; height:42px; display:flex; align-items:center; gap:6px; opacity:0.9;">
+          <div style="width:16px; height:16px; background:#dbeafe; border-radius:5px; flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div class="mini-bar" style="background:#e2e8f0; width:90%;"></div>
+            <div class="mini-bar" style="background:#6366f1; width:40%;"></div>
+          </div>
+        </div>
+        <div class="mini-card" style="background:#f1f5f9; height:32px; opacity:0.7;"></div>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-tag">Écran 2</div>
+      <div class="card-title">📚 Apprendre</div>
+      <div class="card-desc">Liste des zones d'apprentissage avec modules, filtres par difficulté et barre de progression globale.</div>
+      <div class="card-features">
+        <span class="feature-tag">Searchbar</span>
+        <span class="feature-tag">Filtres pills</span>
+        <span class="feature-tag">Zones accordion</span>
+        <span class="feature-tag">Statuts modules</span>
+        <span class="feature-tag">Zones verrouillées</span>
+      </div>
+      <a href="learn.html" class="card-btn">Voir la maquette →</a>
+    </div>
+  </a>
+
+  <!-- Daily -->
+  <a href="daily.html" class="screen-card">
+    <div class="card-preview preview-daily">
+      <div class="preview-phone" style="background:rgba(99,102,241,0.08); border-color:rgba(99,102,241,0.2);">
+        <div class="mini-header">
+          <div style="width:14px; height:14px; background:rgba(255,255,255,0.1); border-radius:4px;"></div>
+          <div style="width:32px; height:14px; background:rgba(251,191,36,0.2); border-radius:4px;"></div>
+        </div>
+        <div style="display:flex; gap:3px; padding:4px 8px; justify-content:center;">
+          <div style="width:14px; height:4px; background:#f59e0b; border-radius:2px;"></div>
+          <div style="width:14px; height:4px; background:#f59e0b; border-radius:2px;"></div>
+          <div style="width:14px; height:4px; background:#6366f1; border-radius:2px;"></div>
+          <div style="width:14px; height:4px; background:rgba(255,255,255,0.1); border-radius:2px;"></div>
+          <div style="width:14px; height:4px; background:rgba(255,255,255,0.1); border-radius:2px;"></div>
+        </div>
+        <div class="mini-text" style="background:rgba(165,180,252,0.3); width:50%;"></div>
+        <div class="mini-text" style="background:rgba(255,255,255,0.15); width:90%;"></div>
+        <div class="mini-text" style="background:rgba(255,255,255,0.1); width:75%;"></div>
+        <div class="mini-card" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); height:48px;">
+          <div class="mini-bar" style="background:rgba(165,180,252,0.3); width:40%;"></div>
+          <div class="mini-text-sm" style="background:rgba(255,255,255,0.1); width:80%;"></div>
+        </div>
+        <div class="mini-card" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); height:48px;">
+          <div class="mini-bar" style="background:rgba(52,211,153,0.4); width:40%;"></div>
+          <div class="mini-text-sm" style="background:rgba(255,255,255,0.1); width:80%;"></div>
+        </div>
+        <div class="mini-card" style="background:linear-gradient(135deg,#6366f1,#8b5cf6); height:24px; display:flex; align-items:center; justify-content:center;">
+          <div style="width:50%; height:4px; background:rgba(255,255,255,0.4); border-radius:2px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-tag">Écran 3</div>
+      <div class="card-title">⚡ Défi du Jour</div>
+      <div class="card-desc">Dark mode immersif avec scénario financier du jour, deux choix interactifs et historique des réponses.</div>
+      <div class="card-features">
+        <span class="feature-tag">Dark mode</span>
+        <span class="feature-tag">Streak dots</span>
+        <span class="feature-tag">Choix A/B</span>
+        <span class="feature-tag">Stats inline</span>
+        <span class="feature-tag">Historique</span>
+      </div>
+      <a href="daily.html" class="card-btn">Voir la maquette →</a>
+    </div>
+  </a>
+
+  <!-- Profile -->
+  <a href="profile.html" class="screen-card">
+    <div class="card-preview preview-profile">
+      <div class="preview-phone" style="background:rgba(255,255,255,0.95); border-color:rgba(255,255,255,0.5);">
+        <div style="background:linear-gradient(160deg,#4f46e5,#7c3aed); height:70px; padding:10px; display:flex; flex-direction:column; justify-content:flex-end;">
+          <div style="display:flex; align-items:flex-end; gap:6px;">
+            <div style="width:22px; height:22px; background:rgba(255,255,255,0.2); border-radius:7px; border:1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-size:11px;">🦊</div>
+            <div>
+              <div style="width:40px; height:5px; background:rgba(255,255,255,0.7); border-radius:2px;"></div>
+              <div style="width:28px; height:3px; background:rgba(255,255,255,0.3); border-radius:2px; margin-top:2px;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin:-12px 8px 0; background:white; border-radius:10px; padding:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:grid; grid-template-columns:repeat(4,1fr); gap:4px;">
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div style="font-size:8px;">📚</div>
+            <div style="width:12px; height:4px; background:#1e293b; border-radius:2px; margin-top:2px;"></div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div style="font-size:8px;">🏅</div>
+            <div style="width:8px; height:4px; background:#1e293b; border-radius:2px; margin-top:2px;"></div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div style="font-size:8px;">⚡</div>
+            <div style="width:16px; height:4px; background:#1e293b; border-radius:2px; margin-top:2px;"></div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center;">
+            <div style="font-size:8px;">🏆</div>
+            <div style="width:12px; height:4px; background:#1e293b; border-radius:2px; margin-top:2px;"></div>
+          </div>
+        </div>
+        <div style="background:white; border-radius:8px; margin:6px 8px; height:22px; padding:6px 8px;">
+          <div style="width:80%; height:4px; background:#e2e8f0; border-radius:2px; overflow:hidden;">
+            <div style="width:67%; height:100%; background:linear-gradient(90deg,#6366f1,#8b5cf6);"></div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:2px 8px;">
+          <div style="width:100%; padding-top:100%; background:#fef3c7; border-radius:6px; position:relative;">
+            <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:10px;">🔥</span>
+          </div>
+          <div style="width:100%; padding-top:100%; background:#d1fae5; border-radius:6px; position:relative;">
+            <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:10px;">🌱</span>
+          </div>
+          <div style="width:100%; padding-top:100%; background:#ede9fe; border-radius:6px; position:relative;">
+            <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:10px;">⭐</span>
+          </div>
+          <div style="width:100%; padding-top:100%; background:#f1f5f9; border:1.5px dashed #e2e8f0; border-radius:6px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-info">
+      <div class="card-tag">Écran 4</div>
+      <div class="card-title">👤 Profil</div>
+      <div class="card-desc">Profil utilisateur avec hero gradient, stats flottantes, progression de niveau, badges et paramètres.</div>
+      <div class="card-features">
+        <span class="feature-tag">Hero gradient</span>
+        <span class="feature-tag">Stats flottantes</span>
+        <span class="feature-tag">Barre XP</span>
+        <span class="feature-tag">Grille badges</span>
+        <span class="feature-tag">Paramètres</span>
+      </div>
+      <a href="profile.html" class="card-btn">Voir la maquette →</a>
+    </div>
+  </a>
+
+</main>
+
+<footer>
+  <div class="footer-text">4 maquettes HTML/CSS · Prêtes pour implémentation React Native</div>
+  <div class="footer-badge">💸 NoBroke · UI Kit v1</div>
+</footer>
+
+</body>
+</html>

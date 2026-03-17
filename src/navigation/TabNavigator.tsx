@@ -1,24 +1,28 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TabParamList } from '@/types';
 import HomeScreen from '@/screens/HomeScreen';
 import ModulesListScreen from '@/screens/modules/ModulesListScreen';
-import BadgesScreen from '@/screens/BadgesScreen';
+import SimulatorsScreen from '@/screens/SimulatorsScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import MoreScreen from '@/screens/MoreScreen';
 import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-const TAB_ICONS: Record<string, 'home' | 'book' | 'trophy' | 'person' | 'ellipsis-horizontal'> = {
+const TAB_ICONS: Record<string, 'home' | 'book' | 'calculator' | 'person' | 'ellipsis-horizontal'> = {
   Home: 'home',
   Modules: 'book',
-  Badges: 'trophy',
+  Simulators: 'calculator',
   Profile: 'person',
   More: 'ellipsis-horizontal',
 };
 
 const TabNavigator: React.FC = () => {
+  const insets = useSafeAreaInsets();
+  const tabBarPaddingBottom = Math.max(8, insets.bottom);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -27,9 +31,9 @@ const TabNavigator: React.FC = () => {
           backgroundColor: '#ffffff',
           borderTopWidth: 1,
           borderTopColor: '#e2e8f0',
-          paddingBottom: 8,
           paddingTop: 8,
-          height: 60,
+          paddingBottom: tabBarPaddingBottom,
+          height: 60 + tabBarPaddingBottom - 8,
         },
         tabBarActiveTintColor: '#6366f1',
         tabBarInactiveTintColor: '#94a3b8',
@@ -60,12 +64,12 @@ const TabNavigator: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name="Badges"
-        component={BadgesScreen}
+        name="Simulators"
+        component={SimulatorsScreen}
         options={{
-          tabBarLabel: 'Défis',
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name={TAB_ICONS.Badges} size={size || 24} color={color} />
+          tabBarLabel: 'Simulateurs',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name={TAB_ICONS.Simulators} size={size || 24} color={color} />
           ),
         }}
       />

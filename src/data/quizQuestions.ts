@@ -81,7 +81,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: 6,
-    question: "Qu'est-ce qu'un taux d'intérêt composé ?",
+    question: "Qu'est-ce que les intérêts composés ?",
     options: [
       "Un taux qui reste fixe",
       "Un taux qui change chaque mois",
@@ -96,16 +96,16 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   // DIFFICILE (7-10)
   {
     id: 7,
-    question: "Quel est le plafond annuel de versement sur un Livret A ?",
+    question: "À quoi correspond le taux marginal d'imposition ?",
     options: [
-      "10 000€",
-      "15 300€",
-      "22 950€",
-      "Aucun plafond"
+      "Le taux moyen appliqué à l'ensemble des revenus",
+      "Le taux appliqué à la dernière tranche de revenus",
+      "Le taux fixe de la TVA",
+      "Le taux d'imposition sur les plus-values"
     ],
-    correctAnswer: 2,
+    correctAnswer: 1,
     difficulty: 'hard',
-    explanation: "Le plafond du Livret A est de 22 950€ (hors intérêts capitalisés)."
+    explanation: "Le taux marginal d'imposition est le taux appliqué à la dernière tranche de revenus, c'est-à-dire au dernier euro gagné. Il détermine le coût fiscal d'une augmentation de revenu."
   },
   {
     id: 8,
@@ -140,23 +140,26 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       "12,8%",
       "17,2%",
       "30%",
-      "45%"
+      "31,4%"
     ],
-    correctAnswer: 2,
+    correctAnswer: 3,
     difficulty: 'hard',
-    explanation: "Le PFU est de 30% (12,8% d'impôt + 17,2% de prélèvements sociaux) sur les revenus de capitaux mobiliers."
+    explanation: "Le PFU est de 31,4% depuis la loi 2026 (12,8% d'impôt + 18,6% de prélèvements sociaux) sur les revenus de capitaux mobiliers."
   }
 ];
 
 // Calcul du niveau en fonction du score
+// Les seuils sont alignés sur les levelRequired des zones (1, 11, 21, 31)
 export const calculateLevel = (score: number): number => {
-  if (score <= 3) return 1;
-  if (score <= 6) return 10;
-  if (score <= 8) return 20;
-  return 30;
+  if (score <= 3) return 1;   // Zone 1 accessible (levelRequired: 1)
+  if (score <= 6) return 11;  // Zone 2 accessible (levelRequired: 11)
+  if (score <= 8) return 21;  // Zone 3 accessible (levelRequired: 21)
+  return 31;                  // Zone 4 accessible (levelRequired: 31)
 };
 
 // Calcul des XP en fonction du score
+// Courbe linéaire : 500 XP par niveau, donc l'XP initial = (level - 1) * 500
 export const calculateXP = (score: number): number => {
-  return score * 50; // 50 XP par bonne réponse
+  const level = calculateLevel(score);
+  return (level - 1) * 500; // XP exact pour commencer exactement au bon niveau
 };

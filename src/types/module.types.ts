@@ -57,10 +57,16 @@ export interface UserModuleProgress {
   completedAt?: string;
 }
 
+export type LockReason =
+  | 'zone_level'    // La zone entière est inaccessible (niveau insuffisant)
+  | 'sequential'    // Le module précédent n'est pas encore complété
+  | 'premium';      // Contenu réservé aux abonnés premium
+
 export interface ModuleWithProgress extends Module {
   progress?: UserModuleProgress;
-  locked: boolean; // User n'a pas le niveau requis
-  premiumLocked: boolean; // User n'a pas l'abonnement Premium
+  locked: boolean;         // Verrouillé par niveau de zone ou module précédent
+  premiumLocked: boolean;  // Verrouillé par abonnement premium
+  lockReason?: LockReason; // Raison précise du verrouillage
 }
 
 export interface ModuleCompletionResult {
@@ -68,6 +74,7 @@ export interface ModuleCompletionResult {
   xpGained: number;
   leveledUp: boolean;
   newLevel?: number;
+  newTotalXP?: number;
   badgeUnlocked?: {
     id: string;
     name: string;

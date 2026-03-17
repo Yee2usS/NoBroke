@@ -1,11 +1,12 @@
 import { Module } from '@/types/module.types';
+import { MODULES_ZONE1_EXTRA } from './modulesZone1Extra';
+import { MODULES_ZONE2_EXTRA } from './modulesZone2Extra';
+import { MODULES_ZONE3_EXTRA } from './modulesZone3Extra';
+import { MODULES_ZONE3_NEW } from './modulesZone3New';
+import { MODULES_ZONE4 } from './modulesZone4';
+import { MODULES_ZONE5 } from './modulesZone5';
 
-/**
- * Base de données des modules de NoBroke
- * MVP : 15 modules détaillés (3 par zone)
- * Total final : 59 modules
- */
-export const MODULES: Module[] = [
+const BASE_MODULES: Module[] = [
   // ==========================================
   // ZONE 1 : VILLAGE DES FAUCHÉS (Budget)
   // ==========================================
@@ -1625,6 +1626,23 @@ Tu as maintenant une ROADMAP claire ! 🗺️`,
     },
   },
 ];
+
+// IDs des placeholders à remplacer par les versions complètes
+const PLACEHOLDER_IDS = new Set(['module-3-2', 'module-3-3', 'module-4-2', 'module-5-2']);
+
+// Fusion : base sans les placeholders + nouveaux modules complets
+export const MODULES: Module[] = [
+  ...BASE_MODULES.filter((m) => !PLACEHOLDER_IDS.has(m.id)),
+  ...MODULES_ZONE1_EXTRA,
+  ...MODULES_ZONE2_EXTRA,
+  ...MODULES_ZONE3_EXTRA,  // Contient les 3-2 et 3-3 complets
+  ...MODULES_ZONE3_NEW,
+  ...MODULES_ZONE4,        // Contient 4-2 complet + 4-3 à 4-12
+  ...MODULES_ZONE5,        // Contient 5-2 complet + 5-3 à 5-11
+].sort((a, b) => {
+  if (a.zone !== b.zone) return a.zone - b.zone;
+  return a.orderInZone - b.orderInZone;
+});
 
 /**
  * Récupère un module par son ID

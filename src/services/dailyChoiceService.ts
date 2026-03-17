@@ -27,6 +27,11 @@ export interface UserChoiceResult {
   };
   explanation: string;
   lesson: DailyScenario['lesson'];
+  // Données pour la mise à jour du wallet
+  moneyDelta?: number;
+  scenarioId?: string;
+  date?: string;
+  situationTitle?: string;
   error?: string;
 }
 
@@ -200,14 +205,16 @@ export const submitChoice = async (
       await awardXP(userId, 'daily_choice');
     }
 
-    // 5. Pour le MVP, virtualMoney et stats sont gérés localement dans le store
-    // TODO: Ajouter colonnes virtual_money, discipline, creativity, prudence dans profiles
-
     return {
       success: true,
       consequences,
       explanation,
       lesson,
+      // La mise à jour du wallet est faite côté UI via useWalletStore.applyTransaction
+      moneyDelta: consequences.money ?? 0,
+      scenarioId: scenario.id,
+      date: new Date().toISOString().split('T')[0],
+      situationTitle: scenario.situation.slice(0, 60) + '…',
     };
   } catch (error: any) {
     console.error('Erreur submitChoice:', error);

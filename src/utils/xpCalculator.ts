@@ -19,17 +19,20 @@ export interface LevelInfo {
 }
 
 // Constantes XP
+// Courbe linéaire : chaque niveau coûte exactement 500 XP
+// Zone 1 free = 9 modules → 9 × 556 ≈ 5000 XP = niveau 11 → débloque zone 2
 export const XP_REWARDS = {
-  MODULE_COMPLETE: 50,
-  DAILY_CHOICE: 30,
-  QUIZ_SUCCESS: 20,
-  STREAK_7_DAYS: 100,
-  INVITE_FRIEND: 200,
+  MODULE_COMPLETE: 556,
+  DAILY_CHOICE: 50,
+  QUIZ_SUCCESS: 30,
+  STREAK_7_DAYS: 200,
+  INVITE_FRIEND: 500,
 } as const;
 
 export const MAX_LEVEL = 50;
-export const BASE_XP = 100;
-export const XP_MULTIPLIER = 1.15;
+export const BASE_XP = 500;
+// Multiplicateur 1.0 = courbe parfaitement linéaire (chaque niveau coûte BASE_XP)
+export const XP_MULTIPLIER = 1.0;
 
 /**
  * Calcule l'XP requis pour atteindre un niveau spécifique

@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/services/supabase';
 import { useUserStore } from '@/store/useUserStore';
+import { useWalletStore } from '@/store/useWalletStore';
+import { useStatsStore } from '@/store/useStatsStore';
+import { useStreakStore } from '@/store/useStreakStore';
+import { updateStreakOnVisit } from '@/services/streakService';
 
 /**
  * Hook personnalisé pour gérer l'authentification Supabase
@@ -20,6 +24,8 @@ export const useSupabase = () => {
         if (event === 'SIGNED_IN' && session?.user) {
           await loadUserData(session.user.id);
         } else if (event === 'SIGNED_OUT') {
+          useWalletStore.getState().clearForLogout();
+          useStatsStore.getState().clearForLogout();
           logout();
         }
       }
@@ -63,22 +69,35 @@ export const useSupabase = () => {
         username: profileData.username,
         avatar_url: profileData.avatar_url,
         onboarding_completed: profileData.onboarding_completed,
+        subscription_tier: profileData.subscription_tier || 'free',
         created_at: profileData.created_at,
         updated_at: profileData.updated_at,
       };
 
+      // Mettre à jour le streak (retour quotidien)
+      const streakResult = await updateStreakOnVisit(userId);
+
       const progressData = {
         id: profileData.id, // Même ID que le profil
         user_id: profileData.id,
-        level: profileData.level || 1,
-        xp: profileData.xp || 0,
-        streak: profileData.streak || 0,
-        last_visit: profileData.last_visit || new Date().toISOString(),
+        level: profileData?.level ?? 1,
+        xp: profileData?.xp ?? 0,
+        streak: streakResult.success ? streakResult.newStreak : (profileData?.streak ?? 0),
+        last_visit: new Date().toISOString(),
         created_at: profileData.created_at,
       };
 
       setUser(userData);
       setProgress(progressData);
+
+      // Afficher le modal de félicitations si retour du jour
+      if (streakResult.success && streakResult.isNewDay && streakResult.newStreak > 0) {
+        useStreakStore.getState().showStreakModal(streakResult.newStreak);
+      }
+
+      // Charger le wallet et les stats spécifiques à cet utilisateur
+      await useWalletStore.getState().loadForUser(userId);
+      await useStatsStore.getState().loadForUser(userId);
     } catch (error) {
       console.error('Erreur lors du chargement des données utilisateur:', error);
     }

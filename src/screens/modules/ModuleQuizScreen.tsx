@@ -4,11 +4,12 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   Animated,
   Modal,
+  ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -41,6 +42,7 @@ const ModuleQuizScreen: React.FC = () => {
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     loadModule();
@@ -70,6 +72,11 @@ const ModuleQuizScreen: React.FC = () => {
     }
 
     setShowFeedback(true);
+
+    // Auto-scroll vers le feedback après un court délai
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 150);
 
     // Animation feedback
     Animated.sequence([
@@ -101,6 +108,10 @@ const ModuleQuizScreen: React.FC = () => {
       setSelectedAnswer(null);
       setShowFeedback(false);
       setIsCorrect(false);
+      // Revenir en haut pour la prochaine question
+      setTimeout(() => {
+        scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+      }, 50);
     } else {
       // Fin du quiz
       handleCompleteQuiz();
@@ -179,7 +190,13 @@ const ModuleQuizScreen: React.FC = () => {
       </View>
 
       {/* Question */}
-      <View style={styles.content}>
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.content}
+        contentContainerStyle={styles.contentInner}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.questionCard}>
           <Text style={styles.questionText}>{question.question}</Text>
         </View>
@@ -254,7 +271,7 @@ const ModuleQuizScreen: React.FC = () => {
             <Text style={styles.feedbackText}>{question.explanation}</Text>
           </Animated.View>
         )}
-      </View>
+      </ScrollView>
 
       {/* Footer */}
       <View style={styles.footer}>
@@ -387,7 +404,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  contentInner: {
     padding: 24,
+    paddingBottom: 16,
   },
   questionCard: {
     backgroundColor: '#ffffff',

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>NoBroke – Daily Choice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --violet: #8B5CF6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --bg: #f0f2ff;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text2: #64748b;
+      --text3: #94a3b8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e8eaf6;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+      min-height: 100vh;
+    }
+
+    .phone {
+      width: 390px;
+      min-height: 844px;
+      background: #0f172a;
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(99,102,241,0.25), 0 8px 24px rgba(0,0,0,0.12);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Glow background */
+    .bg-glow {
+      position: absolute;
+      top: -60px; left: 50%; transform: translateX(-50%);
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .bg-glow-2 {
+      position: absolute;
+      bottom: 100px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .status-bar {
+      padding: 14px 28px 0;
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .status-bar .time { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.9); }
+    .status-icons { font-size: 13px; color: rgba(255,255,255,0.7); display: flex; gap: 6px; }
+
+    .scroll-area {
+      flex: 1; overflow-y: auto; padding-bottom: 90px; scrollbar-width: none;
+      position: relative; z-index: 1;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ─── HEADER ─── */
+    .header {
+      padding: 20px 24px 8px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .back-btn {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; cursor: pointer; color: white;
+    }
+    .header-center { text-align: center; }
+    .header-title { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.9); }
+    .header-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+    .xp-badge {
+      background: rgba(251,191,36,0.15);
+      border: 1px solid rgba(251,191,36,0.35);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 13px; font-weight: 700; color: #fbbf24;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* ─── STREAK ROW ─── */
+    .streak-row {
+      display: flex; gap: 6px;
+      padding: 12px 24px;
+      justify-content: center;
+    }
+    .streak-dot {
+      width: 28px; height: 6px;
+      border-radius: 3px;
+    }
+    .streak-dot.done { background: #f59e0b; }
+    .streak-dot.today { background: #6366f1; box-shadow: 0 0 8px rgba(99,102,241,0.6); }
+    .streak-dot.future { background: rgba(255,255,255,0.1); }
+
+    /* ─── QUESTION CARD ─── */
+    .question-section {
+      padding: 16px 20px 20px;
+    }
+    .question-label {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .q-tag {
+      background: rgba(99,102,241,0.25);
+      border: 1px solid rgba(99,102,241,0.4);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 11px; font-weight: 700; color: #a5b4fc;
+      letter-spacing: 0.8px; text-transform: uppercase;
+    }
+    .q-category {
+      font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 500;
+    }
+    .question-text {
+      font-size: 22px; font-weight: 800; color: white;
+      line-height: 1.45; margin-bottom: 8px;
+    }
+    .question-context {
+      font-size: 14px; color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+
+    /* ─── CHOICE CARDS ─── */
+    .choices {
+      padding: 0 20px;
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: 24px;
+    }
+    .choice-card {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .choice-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(99,102,241,0.4);
+      transform: translateY(-1px);
+    }
+    .choice-card.selected-a {
+      background: rgba(99,102,241,0.15);
+      border-color: #6366f1;
+      box-shadow: 0 0 24px rgba(99,102,241,0.25);
+    }
+    .choice-card.selected-b {
+      background: rgba(16,185,129,0.12);
+      border-color: #10b981;
+      box-shadow: 0 0 24px rgba(16,185,129,0.2);
+    }
+    .choice-letter {
+      width: 32px; height: 32px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .letter-a { background: rgba(99,102,241,0.25); color: #a5b4fc; }
+    .letter-b { background: rgba(16,185,129,0.2); color: #34d399; }
+    .choice-emoji { font-size: 28px; position: absolute; top: 18px; right: 18px; }
+    .choice-title { font-size: 16px; font-weight: 700; color: white; margin-bottom: 6px; line-height: 1.3; }
+    .choice-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    /* ─── CONFIRM BTN ─── */
+    .confirm-section { padding: 0 20px 12px; }
+    .confirm-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #6366f1, #8B5CF6);
+      border: none;
+      border-radius: 18px;
+      padding: 16px;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+
+    /* ─── STATS ─── */
+    .stats-section {
+      padding: 8px 20px 16px;
+      display: flex; gap: 10px;
+    }
+    .stat-mini {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-mini-val { font-size: 18px; font-weight: 800; color: white; }
+    .stat-mini-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+    /* ─── PAST CHOICES ─── */
+    .past-section {
+      padding: 0 20px 12px;
+    }
+    .past-title {
+      font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.6);
+      margin-bottom: 10px;
+    }
+    .past-row {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+    .past-day { font-size: 11px; color: rgba(255,255,255,0.35); width: 36px; }
+    .past-choice-tag {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px; border-radius: 99px;
+    }
+    .past-correct { background: rgba(16,185,129,0.15); color: #34d399; }
+    .past-incorrect { background: rgba(239,68,68,0.15); color: #f87171; }
+    .past-question { font-size: 12px; color: rgba(255,255,255,0.5); flex: 1; }
+    .past-xp { font-size: 11px; font-weight: 700; color: #fbbf24; }
+
+    /* ─── TAB BAR ─── */
+    .tab-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(15,23,42,0.98);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 10px 0 20px;
+      display: flex; justify-content: space-around; align-items: center;
+      z-index: 10;
+    }
+    .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+    .tab-icon { font-size: 22px; }
+    .tab-label { font-size: 10px; font-weight: 600; }
+    .tab-item.active .tab-label { color: #6366f1; }
+    .tab-item:not(.active) .tab-label { color: rgba(255,255,255,0.3); }
+    .tab-active-pill { width: 5px; height: 5px; background: #6366f1; border-radius: 50%; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+  </div>
+
+  <div class="scroll-area">
+    <!-- Header -->
+    <div class="header">
+      <div class="back-btn">←</div>
+      <div class="header-center">
+        <div class="header-title">⚡ Défi du jour</div>
+        <div class="header-sub">Mardi 25 Février</div>
+      </div>
+      <div class="xp-badge">✨ +20 XP</div>
+    </div>
+
+    <!-- Streak dots -->
+    <div class="streak-row">
+      <div class="streak-dot done"></div>
+      <div class="streak-dot done"></div>
+      <div class="streak-dot done"></div>
+      <div class="streak-dot done"></div>
+      <div class="streak-dot done"></div>
+      <div class="streak-dot done"></div>
+      <div class="streak-dot done"></div>
+      <div class="streak-dot today"></div>
+      <div class="streak-dot future"></div>
+      <div class="streak-dot future"></div>
+      <div class="streak-dot future"></div>
+      <div class="streak-dot future"></div>
+      <div class="streak-dot future"></div>
+      <div class="streak-dot future"></div>
+    </div>
+
+    <!-- Question -->
+    <div class="question-section">
+      <div class="question-label">
+        <span class="q-tag">⚡ Scénario</span>
+        <span class="q-category">Épargne · Investissement</span>
+      </div>
+      <div class="question-text">
+        Tu reçois 500€ inattendus. Qu'est-ce que tu fais ?
+      </div>
+      <div class="question-context">
+        Tu as une dette de 800€ à 15% d'intérêt ET un livret A avec 200€ dedans. Chaque euro compte.
+      </div>
+    </div>
+
+    <!-- Choices -->
+    <div class="choices">
+      <div class="choice-card">
+        <div class="choice-letter letter-a">A</div>
+        <div class="choice-emoji">🏦</div>
+        <div class="choice-title">Rembourser la dette en priorité</div>
+        <div class="choice-desc">Éliminer 500€ de dette à 15% = économiser 75€ d'intérêts par an garantis.</div>
+      </div>
+      <div class="choice-card">
+        <div class="choice-letter letter-b">B</div>
+        <div class="choice-emoji">📈</div>
+        <div class="choice-title">Investir dans un ETF World</div>
+        <div class="choice-desc">Viser une performance historique de ~8% par an sur le long terme.</div>
+      </div>
+    </div>
+
+    <!-- Confirm -->
+    <div class="confirm-section">
+      <button class="confirm-btn">Valider mon choix →</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-section">
+      <div class="stat-mini">
+        <div class="stat-mini-val">🔥 14</div>
+        <div class="stat-mini-label">Jours de streak</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-val">11/14</div>
+        <div class="stat-mini-label">Bonnes réponses</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-val">220</div>
+        <div class="stat-mini-label">XP gagnés</div>
+      </div>
+    </div>
+
+    <!-- Past choices -->
+    <div class="past-section">
+      <div class="past-title">Tes choix récents</div>
+      <div class="past-row">
+        <div class="past-day">Lun</div>
+        <div class="past-choice-tag past-correct">✓ Correct</div>
+        <div class="past-question">Epargne d'urgence vs investissement</div>
+        <div class="past-xp">+20</div>
+      </div>
+      <div class="past-row">
+        <div class="past-day">Dim</div>
+        <div class="past-choice-tag past-correct">✓ Correct</div>
+        <div class="past-question">Location vs achat immobilier</div>
+        <div class="past-xp">+20</div>
+      </div>
+      <div class="past-row">
+        <div class="past-day">Sam</div>
+        <div class="past-choice-tag past-incorrect">✗ Raté</div>
+        <div class="past-question">Carte de crédit vs débit</div>
+        <div class="past-xp">+0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item">
+      <div class="tab-icon">🏠</div>
+      <div class="tab-label">Accueil</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">📚</div>
+      <div class="tab-label">Apprendre</div>
+    </div>
+    <div class="tab-item active">
+      <div class="tab-icon">⚡</div>
+      <div class="tab-label" style="color:#6366f1;">Défi</div>
+      <div class="tab-active-pill"></div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">🏅</div>
+      <div class="tab-label">Badges</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">👤</div>
+      <div class="tab-label">Profil</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

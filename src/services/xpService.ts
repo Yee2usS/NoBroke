@@ -41,7 +41,7 @@ export const awardXP = async (
 
     // 2. Calculer les nouveaux XP
     const xpToAdd = getXPReward(actionType);
-    const currentTotalXP = profileData.xp;
+    const currentTotalXP = Number(profileData?.xp) || 0;
     const result = addXP(currentTotalXP, xpToAdd);
 
     // 3. Mettre à jour dans Supabase profiles
@@ -169,7 +169,7 @@ export const awardCustomXP = async (
     if (fetchError) throw fetchError;
     if (!profileData) throw new Error('Profil utilisateur introuvable');
 
-    const result = addXP(profileData.xp, xpAmount);
+    const result = addXP(Number(profileData?.xp) || 0, xpAmount);
 
     const { error: updateError } = await supabase
       .from('profiles')

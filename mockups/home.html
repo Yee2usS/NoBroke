@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>NoBroke – Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --violet: #8B5CF6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #f0f2ff;
+      --surface: #ffffff;
+      --surface2: #f8fafc;
+      --border: #e8eaf6;
+      --text: #1e293b;
+      --text2: #64748b;
+      --text3: #94a3b8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e8eaf6;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 16px;
+    }
+
+    .phone {
+      width: 390px;
+      min-height: 844px;
+      background: var(--bg);
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(99,102,241,0.25), 0 8px 24px rgba(0,0,0,0.12);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── STATUS BAR ─── */
+    .status-bar {
+      background: transparent;
+      padding: 14px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-bar .time { font-size: 15px; font-weight: 600; color: var(--text); }
+    .status-icons { display: flex; gap: 6px; align-items: center; }
+    .status-icons span { font-size: 13px; }
+
+    /* ─── SCROLL AREA ─── */
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 90px;
+      scrollbar-width: none;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ─── HEADER ─── */
+    .header {
+      padding: 20px 24px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-left {}
+    .greeting { font-size: 13px; color: var(--text2); font-weight: 500; }
+    .username { font-size: 22px; font-weight: 800; color: var(--text); margin-top: 2px; }
+    .header-right { display: flex; gap: 10px; align-items: center; }
+    .notif-btn {
+      width: 42px; height: 42px;
+      background: var(--surface);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-size: 18px;
+      position: relative;
+      cursor: pointer;
+    }
+    .notif-dot {
+      position: absolute; top: 9px; right: 9px;
+      width: 8px; height: 8px;
+      background: var(--danger);
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+    }
+    .avatar {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--violet), var(--primary));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+    }
+
+    /* ─── XP CARD ─── */
+    .xp-card {
+      margin: 0 20px 20px;
+      background: linear-gradient(135deg, #6366f1 0%, #8B5CF6 50%, #a78bfa 100%);
+      border-radius: 24px;
+      padding: 20px 22px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(99,102,241,0.4);
+    }
+    .xp-card::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .xp-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: 30px;
+      width: 90px; height: 90px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .xp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .level-badge {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .streak-badge {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .xp-values {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 10px;
+    }
+    .xp-current { font-size: 32px; font-weight: 900; }
+    .xp-next { font-size: 13px; opacity: 0.75; }
+    .xp-bar-bg {
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+      border-radius: 8px;
+      width: 68%;
+      box-shadow: 0 0 8px rgba(251,191,36,0.6);
+    }
+    .xp-label { margin-top: 8px; font-size: 12px; opacity: 0.75; text-align: right; }
+
+    /* ─── SECTION TITLE ─── */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      margin-bottom: 14px;
+    }
+    .section-title { font-size: 17px; font-weight: 700; color: var(--text); }
+    .see-all { font-size: 13px; font-weight: 600; color: var(--primary); }
+
+    /* ─── STATS ROW ─── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .stat-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .stat-value { font-size: 22px; font-weight: 800; color: var(--text); }
+    .stat-label { font-size: 12px; color: var(--text2); font-weight: 500; }
+
+    /* ─── DAILY CHOICE ─── */
+    .daily-card {
+      margin: 0 20px 24px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      border-radius: 24px;
+      padding: 20px 22px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.3);
+      cursor: pointer;
+    }
+    .daily-card::after {
+      content: '';
+      position: absolute;
+      top: -40px; right: -20px;
+      width: 140px; height: 140px;
+      background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%);
+    }
+    .daily-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(99,102,241,0.3);
+      border: 1px solid rgba(99,102,241,0.5);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #a5b4fc;
+      margin-bottom: 12px;
+    }
+    .daily-question {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      color: #f1f5f9;
+    }
+    .daily-cta {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .daily-btn {
+      background: linear-gradient(135deg, var(--primary), var(--violet));
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 18px;
+      cursor: pointer;
+    }
+    .daily-xp {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 13px; color: #fbbf24; font-weight: 600;
+    }
+
+    /* ─── CONTINUE MODULES ─── */
+    .modules-scroll {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 0 20px 4px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+    .modules-scroll::-webkit-scrollbar { display: none; }
+    .module-card {
+      flex-shrink: 0;
+      width: 200px;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .module-icon-wrap {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .module-label {
+      font-size: 11px; font-weight: 700; color: var(--text3);
+      text-transform: uppercase; letter-spacing: 0.7px;
+      margin-bottom: 4px;
+    }
+    .module-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.3; }
+    .module-progress-bg { background: #e2e8f0; border-radius: 4px; height: 5px; margin-bottom: 8px; overflow: hidden; }
+    .module-progress-fill { height: 100%; border-radius: 4px; }
+    .module-progress-row { display: flex; justify-content: space-between; align-items: center; }
+    .module-pct { font-size: 12px; font-weight: 600; color: var(--text2); }
+    .module-play {
+      width: 28px; height: 28px;
+      background: var(--primary);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: white;
+    }
+
+    /* ─── BADGES PREVIEW ─── */
+    .badges-row {
+      display: flex; gap: 10px;
+      overflow-x: auto;
+      padding: 0 20px 4px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+    .badges-row::-webkit-scrollbar { display: none; }
+    .badge-item {
+      flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .badge-circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      border: 2px solid;
+    }
+    .badge-name { font-size: 10px; font-weight: 600; color: var(--text2); text-align: center; max-width: 56px; line-height: 1.2; }
+
+    /* ─── TAB BAR ─── */
+    .tab-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      padding: 10px 0 20px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .tab-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      cursor: pointer;
+    }
+    .tab-icon { font-size: 22px; }
+    .tab-label { font-size: 10px; font-weight: 600; }
+    .tab-item.active .tab-label { color: var(--primary); }
+    .tab-item.active .tab-icon { transform: scale(1.1); }
+    .tab-item:not(.active) .tab-label { color: var(--text3); }
+    .tab-active-pill {
+      width: 5px; height: 5px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <span>●●●</span>
+      <span>WiFi</span>
+      <span>🔋</span>
+    </div>
+  </div>
+
+  <div class="scroll-area">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="greeting">Bonjour 👋</div>
+        <div class="username">Maxime</div>
+      </div>
+      <div class="header-right">
+        <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+        <div class="avatar">🦊</div>
+      </div>
+    </div>
+
+    <!-- XP Card -->
+    <div class="xp-card">
+      <div class="xp-top">
+        <div class="level-badge">⚡ Niveau 7</div>
+        <div class="streak-badge">🔥 14 jours</div>
+      </div>
+      <div class="xp-values">
+        <div class="xp-current">1 340 XP</div>
+        <div class="xp-next">/ 2 000 XP</div>
+      </div>
+      <div class="xp-bar-bg">
+        <div class="xp-bar-fill"></div>
+      </div>
+      <div class="xp-label">Encore 660 XP pour le niveau 8 →</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="section-header">
+      <div class="section-title">Tes stats</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fef3c7;">🔥</div>
+        <div class="stat-value">14</div>
+        <div class="stat-label">Jours de streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#d1fae5;">📚</div>
+        <div class="stat-value">23</div>
+        <div class="stat-label">Modules terminés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#ede9fe;">🏅</div>
+        <div class="stat-value">8</div>
+        <div class="stat-label">Badges gagnés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#dbeafe;">📈</div>
+        <div class="stat-value">#42</div>
+        <div class="stat-label">Classement</div>
+      </div>
+    </div>
+
+    <!-- Daily Choice -->
+    <div class="section-header">
+      <div class="section-title">Défi du jour</div>
+      <div class="see-all">+20 XP</div>
+    </div>
+    <div class="daily-card">
+      <div class="daily-tag">⚡ Daily Choice</div>
+      <div class="daily-question">
+        Tu reçois 500€ inattendus. Tu préfères rembourser une dette ou les investir ?
+      </div>
+      <div class="daily-cta">
+        <button class="daily-btn">Faire mon choix →</button>
+        <div class="daily-xp">✨ +20 XP</div>
+      </div>
+    </div>
+
+    <!-- Continue modules -->
+    <div class="section-header">
+      <div class="section-title">Continuer</div>
+      <div class="see-all">Tout voir</div>
+    </div>
+    <div class="modules-scroll">
+      <div class="module-card">
+        <div class="module-icon-wrap" style="background:#d1fae5;">💰</div>
+        <div class="module-label">Épargne</div>
+        <div class="module-title">Les bases de l'épargne</div>
+        <div class="module-progress-bg">
+          <div class="module-progress-fill" style="width:65%; background:#10b981;"></div>
+        </div>
+        <div class="module-progress-row">
+          <div class="module-pct">65%</div>
+          <div class="module-play">▶</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon-wrap" style="background:#dbeafe;">📊</div>
+        <div class="module-label">Investissement</div>
+        <div class="module-title">Bourse pour débutants</div>
+        <div class="module-progress-bg">
+          <div class="module-progress-fill" style="width:30%; background:#6366f1;"></div>
+        </div>
+        <div class="module-progress-row">
+          <div class="module-pct">30%</div>
+          <div class="module-play">▶</div>
+        </div>
+      </div>
+      <div class="module-card">
+        <div class="module-icon-wrap" style="background:#fce7f3;">🏠</div>
+        <div class="module-label">Immobilier</div>
+        <div class="module-title">Acheter ou louer ?</div>
+        <div class="module-progress-bg">
+          <div class="module-progress-fill" style="width:10%; background:#ec4899;"></div>
+        </div>
+        <div class="module-progress-row">
+          <div class="module-pct">10%</div>
+          <div class="module-play">▶</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="section-header">
+      <div class="section-title">Badges récents</div>
+      <div class="see-all">Tout voir</div>
+    </div>
+    <div class="badges-row">
+      <div class="badge-item">
+        <div class="badge-circle" style="background:#fef3c7; border-color:#f59e0b;">🔥</div>
+        <div class="badge-name">Streak 7j</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle" style="background:#d1fae5; border-color:#10b981;">🌱</div>
+        <div class="badge-name">1er Module</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle" style="background:#ede9fe; border-color:#8b5cf6;">⭐</div>
+        <div class="badge-name">Quiz Pro</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle" style="background:#dbeafe; border-color:#3b82f6;">🏆</div>
+        <div class="badge-name">Top 50</div>
+      </div>
+      <div class="badge-item">
+        <div class="badge-circle" style="background:#fce7f3; border-color:#ec4899;">💎</div>
+        <div class="badge-name">Légendaire</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item active">
+      <div class="tab-icon">🏠</div>
+      <div class="tab-label" style="color:#6366f1;">Accueil</div>
+      <div class="tab-active-pill"></div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">📚</div>
+      <div class="tab-label">Apprendre</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">⚡</div>
+      <div class="tab-label">Défi</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">🏅</div>
+      <div class="tab-label">Badges</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">👤</div>
+      <div class="tab-label">Profil</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

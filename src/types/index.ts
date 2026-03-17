@@ -2,12 +2,16 @@
 
 export type BadgeRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
+// Déclaré en premier car utilisé par User
+export type SubscriptionTier = 'free' | 'premium' | 'pro';
+
 export interface User {
   id: string;
   email: string;
   username: string;
   avatar_url?: string;
   onboarding_completed?: boolean;
+  subscription_tier?: SubscriptionTier;
   created_at: string;
   updated_at?: string;
 }
@@ -55,15 +59,17 @@ export interface Badge {
   description: string;
   rarity: BadgeRarity;
   icon: string;
-  category: string;
-  requirement_description: string;
+  category?: string;
+  requirement_description?: string;
+  unlock_condition?: { type: string; value: number };
 }
 
 export interface UserBadge {
   id: string;
   user_id: string;
   badge_id: string;
-  earned_at: string;
+  earned_at?: string;
+  unlocked_at?: string;
   badge?: Badge;
 }
 
@@ -96,8 +102,6 @@ export interface OnboardingQuiz {
 }
 
 // Subscription Types
-export type SubscriptionTier = 'free' | 'premium' | 'pro';
-
 export interface SubscriptionPlan {
   id: SubscriptionTier;
   name: string;
@@ -117,21 +121,36 @@ export type RootStackParamList = {
   Welcome: undefined;
   ProfileQuestions: undefined;
   Quiz: { profileData: any };
-  Result: { score: number; totalQuestions: number; profileData: any };
-  Avatar: { level: number; xp: number; profileData: any };
+  QuickWins: { score: number; totalQuestions: number; profileData: any };
+  Result: { score: number; totalQuestions: number; profileData: any; quickWinsData?: any };
+  Avatar: { level: number; xp: number; profileData: any; quickWinsData?: any };
   MainTabs: undefined;
   DailyChoice: undefined;
   ModulesList: undefined;
   ModuleDetail: { moduleId: string };
   ModuleQuiz: { moduleId: string };
   BadgeDetail: { badgeId: string };
+  Badges: undefined;
   Subscription: undefined;
+  Wallet: undefined;
+  Leaderboard: undefined;
+  Community: undefined;
+  CommunityTopic: { topicId: string; title: string };
+  Battles: undefined;
+  Friends: undefined;
+  CreateBattle: { friendId?: string };
+  BattleDetail: { battleId: string };
+  BattleQuiz: { battleId: string };
+  BattleChoice: { battleId: string };
+  BattleResult: { battleId: string };
+  UpcomingFeatures: undefined;
+  Savings: undefined;
 };
 
 export type TabParamList = {
   Home: undefined;
   Modules: undefined;
-  Badges: undefined;
+  Simulators: undefined;
   Profile: undefined;
   More: undefined;
 };

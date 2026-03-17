@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDailyChoice } from '@/hooks/useDailyChoice';
@@ -14,10 +14,6 @@ import { RootStackParamList } from '@/types';
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-/**
- * Widget "Choix du Jour" pour le Dashboard
- * Design selon mockup : gradient violet-bleu, titre + description, CTA blanc
- */
 const DailyChoiceWidget: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const { todayChoice, hasCompletedToday, loading } = useDailyChoice();
@@ -28,7 +24,7 @@ const DailyChoiceWidget: React.FC = () => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingWrap}>
         <ActivityIndicator size="large" color="#6366f1" />
       </View>
     );
@@ -39,75 +35,80 @@ const DailyChoiceWidget: React.FC = () => {
   }
 
   const title = todayChoice.lesson?.title || 'Choix du Jour';
-  const description = todayChoice.situation?.substring(0, 120) || '';
+  const description = todayChoice.situation?.substring(0, 100) || '';
+
+  const accentColor = hasCompletedToday ? '#64748b' : '#4f46e5';
 
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={handlePress}
-      activeOpacity={0.9}
+      activeOpacity={0.85}
       disabled={hasCompletedToday}
     >
-      <LinearGradient
-        colors={
-          hasCompletedToday ? ['#9ca3af', '#6b7280'] : ['#8B5CF6', '#6366f1']
-        }
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.gradient}
-      >
-        {/* Header: Icon + CHOIX DU JOUR */}
+      <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
+      <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.icon}>✨</Text>
-          <Text style={styles.title}>CHOIX DU JOUR</Text>
+          <View style={[styles.iconWrap, { backgroundColor: hasCompletedToday ? 'rgba(100,116,139,0.12)' : 'rgba(79,70,229,0.12)' }]}>
+            <Ionicons name="sparkles" size={18} color={accentColor} />
+          </View>
+          <Text style={[styles.badge, { color: accentColor }]}>CHOIX DU JOUR</Text>
         </View>
 
-        {/* Titre du scénario */}
-        <Text style={styles.scenarioTitle} numberOfLines={2}>
+        <Text style={styles.title} numberOfLines={2}>
           {title}
         </Text>
 
-        {/* Description / situation */}
         <Text style={styles.description} numberOfLines={2}>
           {description}
-          {description.length >= 120 ? '…' : ''}
+          {description.length >= 100 ? '…' : ''}
         </Text>
 
-        {/* CTA */}
-        <View style={styles.ctaWrapper}>
+        <View style={styles.ctaRow}>
           {hasCompletedToday ? (
-            <View style={styles.completedButton}>
-              <Text style={styles.completedText}>✅ Complété</Text>
+            <View style={styles.completedBtn}>
+              <Ionicons name="checkmark-circle" size={18} color="#64748b" />
+              <Text style={styles.completedText}>Complété</Text>
             </View>
           ) : (
-            <TouchableOpacity
-              style={styles.ctaButton}
-              onPress={handlePress}
-              activeOpacity={0.9}
-            >
+            <View style={styles.ctaBtn}>
               <Text style={styles.ctaText}>Relever le défi</Text>
-            </TouchableOpacity>
+              <Ionicons name="arrow-forward" size={16} color="#4f46e5" />
+            </View>
           )}
         </View>
-      </LinearGradient>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 24,
-    marginTop: 20,
-    borderRadius: 20,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 6,
+  loadingWrap: {
+    padding: 32,
+    alignItems: 'center',
   },
-  gradient: {
+  container: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    marginBottom: 12,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  accentBar: {
+    width: 4,
+  },
+  content: {
+    flex: 1,
     padding: 20,
+    paddingLeft: 18,
   },
   header: {
     flexDirection: 'row',
@@ -115,58 +116,63 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 12,
   },
-  icon: {
-    fontSize: 18,
-    color: '#ffffff',
+  iconWrap: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badge: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 0.8,
   },
   title: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#ffffff',
-    letterSpacing: 0.5,
-  },
-  scenarioTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    fontWeight: '700',
+    color: '#0f172a',
     lineHeight: 24,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   description: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.95)',
-    lineHeight: 20,
-    marginBottom: 20,
+    fontSize: 13,
+    color: '#64748b',
+    lineHeight: 19,
+    marginBottom: 16,
   },
-  ctaWrapper: {
+  ctaRow: {
+    alignItems: 'stretch',
+  },
+  ctaBtn: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
-  },
-  ctaButton: {
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 24,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(79,70,229,0.08)',
     paddingVertical: 14,
-    borderRadius: 14,
-    alignSelf: 'stretch',
-    alignItems: 'center',
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    gap: 8,
   },
   ctaText: {
-    color: '#6366f1',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#4f46e5',
+    fontSize: 15,
+    fontWeight: '700',
   },
-  completedButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 14,
-    alignSelf: 'stretch',
+  completedBtn: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f1f5f9',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    gap: 8,
   },
   completedText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: '#64748b',
+    fontSize: 15,
+    fontWeight: '700',
   },
 });
 

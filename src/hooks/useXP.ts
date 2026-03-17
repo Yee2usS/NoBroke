@@ -17,7 +17,8 @@ export const useXP = () => {
    */
   const getLevelInfo = useCallback(() => {
     if (!progress) return null;
-    return calculateLevelInfo(progress.xp);
+    const totalXP = Number(progress?.xp) || 0;
+    return calculateLevelInfo(totalXP);
   }, [progress]);
 
   /**
@@ -106,7 +107,7 @@ export const useXP = () => {
     levelInfo: getLevelInfo(),
     isAwarding,
     currentLevel: progress?.level || 1,
-    currentXP: progress?.xp || 0,
+    currentXP: Number(progress?.xp) || 0,
 
     // Modal Level Up
     levelUpModalVisible,

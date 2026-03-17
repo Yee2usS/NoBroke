@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>NoBroke – Apprendre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --violet: #8B5CF6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #f0f2ff;
+      --surface: #ffffff;
+      --border: #e8eaf6;
+      --text: #1e293b;
+      --text2: #64748b;
+      --text3: #94a3b8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e8eaf6;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+      min-height: 100vh;
+    }
+
+    .phone {
+      width: 390px;
+      min-height: 844px;
+      background: var(--bg);
+      border-radius: 48px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(99,102,241,0.25), 0 8px 24px rgba(0,0,0,0.12);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-bar {
+      padding: 14px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-bar .time { font-size: 15px; font-weight: 600; color: var(--text); }
+    .status-icons { font-size: 13px; display: flex; gap: 6px; }
+
+    .scroll-area {
+      flex: 1; overflow-y: auto; padding-bottom: 90px; scrollbar-width: none;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ─── HEADER ─── */
+    .header {
+      padding: 18px 24px 12px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .header-title { font-size: 26px; font-weight: 900; color: var(--text); }
+    .search-btn {
+      width: 42px; height: 42px;
+      background: var(--surface);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      cursor: pointer;
+    }
+
+    /* ─── SEARCH BAR ─── */
+    .search-bar {
+      margin: 0 20px 16px;
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .search-bar .icon { font-size: 16px; color: var(--text3); }
+    .search-bar input {
+      border: none; outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; color: var(--text2);
+      background: transparent; flex: 1;
+    }
+
+    /* ─── FILTER PILLS ─── */
+    .filter-row {
+      display: flex; gap: 8px;
+      overflow-x: auto; padding: 0 20px 16px;
+      scrollbar-width: none;
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .pill {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      border-radius: 99px;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .pill.active { background: var(--primary); color: white; }
+    .pill:not(.active) { background: var(--surface); color: var(--text2); }
+
+    /* ─── PROGRESS BANNER ─── */
+    .progress-banner {
+      margin: 0 20px 20px;
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      border-radius: 20px;
+      padding: 16px 18px;
+      color: white;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .progress-banner-icon {
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .banner-text { flex: 1; }
+    .banner-label { font-size: 11px; color: #a5b4fc; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+    .banner-value { font-size: 20px; font-weight: 800; }
+    .banner-sub { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+    .banner-pct {
+      font-size: 28px; font-weight: 900; color: #fbbf24;
+      flex-shrink: 0;
+    }
+
+    /* ─── SECTION ─── */
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 24px; margin-bottom: 12px;
+    }
+    .section-title { font-size: 17px; font-weight: 700; color: var(--text); }
+    .section-count {
+      background: var(--primary);
+      color: white;
+      font-size: 11px; font-weight: 700;
+      padding: 3px 9px; border-radius: 99px;
+    }
+
+    /* ─── ZONE CARD ─── */
+    .zone-card {
+      margin: 0 20px 14px;
+      background: var(--surface);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    .zone-header {
+      padding: 16px 18px;
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer;
+    }
+    .zone-icon {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .zone-info { flex: 1; }
+    .zone-label { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+    .zone-name { font-size: 16px; font-weight: 700; color: var(--text); }
+    .zone-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .zone-modules { font-size: 12px; color: var(--text2); }
+    .zone-progress-mini {
+      background: #e2e8f0; border-radius: 3px; height: 4px; flex: 1; overflow: hidden;
+    }
+    .zone-progress-fill { height: 100%; border-radius: 3px; }
+    .zone-chevron { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
+    .zone-chevron.open { transform: rotate(180deg); }
+
+    /* Module list inside zone */
+    .zone-modules-list { border-top: 1px solid var(--border); }
+    .module-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .module-row:last-child { border-bottom: none; }
+    .module-row-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0;
+    }
+    .module-row-info { flex: 1; }
+    .module-row-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .module-row-meta { display: flex; align-items: center; gap: 8px; }
+    .diff-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px;
+    }
+    .diff-beginner { background: #d1fae5; color: #059669; }
+    .diff-intermediate { background: #fef3c7; color: #d97706; }
+    .diff-advanced { background: #fee2e2; color: #dc2626; }
+    .module-row-duration { font-size: 11px; color: var(--text3); }
+    .module-row-status { flex-shrink: 0; }
+    .status-done { width: 28px; height: 28px; background: #d1fae5; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .status-progress {
+      background: #ede9fe; border-radius: 9px;
+      padding: 4px 9px;
+      font-size: 11px; font-weight: 700; color: var(--primary);
+    }
+    .status-play {
+      width: 28px; height: 28px; background: var(--primary);
+      border-radius: 9px; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: white;
+    }
+    .status-lock { font-size: 16px; color: var(--text3); }
+
+    /* Zone locked state */
+    .zone-card.locked .zone-header { opacity: 0.6; }
+    .zone-locked-badge {
+      background: #f1f5f9;
+      border-radius: 10px;
+      padding: 5px 12px;
+      font-size: 11px; font-weight: 700; color: var(--text3);
+      flex-shrink: 0;
+    }
+
+    /* ─── TAB BAR ─── */
+    .tab-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      padding: 10px 0 20px;
+      display: flex; justify-content: space-around; align-items: center;
+    }
+    .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+    .tab-icon { font-size: 22px; }
+    .tab-label { font-size: 10px; font-weight: 600; }
+    .tab-item.active .tab-label { color: var(--primary); }
+    .tab-item:not(.active) .tab-label { color: var(--text3); }
+    .tab-active-pill { width: 5px; height: 5px; background: var(--primary); border-radius: 50%; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+  </div>
+
+  <div class="scroll-area">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-title">Apprendre 📚</div>
+      <div class="search-btn">🔍</div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <span class="icon">🔍</span>
+      <input type="text" placeholder="Chercher un module..." />
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-row">
+      <button class="pill active">Tous</button>
+      <button class="pill">🌱 Débutant</button>
+      <button class="pill">📈 Intermédiaire</button>
+      <button class="pill">🚀 Avancé</button>
+      <button class="pill">✅ Terminés</button>
+    </div>
+
+    <!-- Progress banner -->
+    <div class="progress-banner">
+      <div class="progress-banner-icon">🎯</div>
+      <div class="banner-text">
+        <div class="banner-label">Ta progression</div>
+        <div class="banner-value">23 / 59 modules</div>
+        <div class="banner-sub">Continue comme ça ! 🔥</div>
+      </div>
+      <div class="banner-pct">39%</div>
+    </div>
+
+    <!-- Zone 1 — Fondamentaux (ouverte) -->
+    <div class="section-header">
+      <div class="section-title">Zones d'apprentissage</div>
+      <div class="section-count">6 zones</div>
+    </div>
+
+    <div class="zone-card">
+      <div class="zone-header">
+        <div class="zone-icon" style="background:#d1fae5;">🌱</div>
+        <div class="zone-info">
+          <div class="zone-label">Zone 1</div>
+          <div class="zone-name">Les Fondamentaux</div>
+          <div class="zone-meta">
+            <span class="zone-modules">8 modules</span>
+            <div class="zone-progress-mini"><div class="zone-progress-fill" style="width:100%; background:#10b981;"></div></div>
+            <span style="font-size:11px; color:#10b981; font-weight:700;">100%</span>
+          </div>
+        </div>
+        <span class="zone-chevron open">▼</span>
+      </div>
+      <div class="zone-modules-list">
+        <div class="module-row">
+          <div class="module-row-icon" style="background:#d1fae5;">💰</div>
+          <div class="module-row-info">
+            <div class="module-row-title">Gérer son argent</div>
+            <div class="module-row-meta">
+              <span class="diff-badge diff-beginner">Débutant</span>
+              <span class="module-row-duration">⏱ 5 min</span>
+            </div>
+          </div>
+          <div class="module-row-status"><div class="status-done">✅</div></div>
+        </div>
+        <div class="module-row">
+          <div class="module-row-icon" style="background:#fef3c7;">📊</div>
+          <div class="module-row-info">
+            <div class="module-row-title">Établir un budget</div>
+            <div class="module-row-meta">
+              <span class="diff-badge diff-beginner">Débutant</span>
+              <span class="module-row-duration">⏱ 7 min</span>
+            </div>
+          </div>
+          <div class="module-row-status"><div class="status-done">✅</div></div>
+        </div>
+        <div class="module-row">
+          <div class="module-row-icon" style="background:#ede9fe;">🏦</div>
+          <div class="module-row-info">
+            <div class="module-row-title">Comprendre les taux</div>
+            <div class="module-row-meta">
+              <span class="diff-badge diff-beginner">Débutant</span>
+              <span class="module-row-duration">⏱ 6 min</span>
+            </div>
+          </div>
+          <div class="module-row-status"><div class="status-done">✅</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone 2 — Épargne (en cours) -->
+    <div class="zone-card">
+      <div class="zone-header">
+        <div class="zone-icon" style="background:#dbeafe;">💼</div>
+        <div class="zone-info">
+          <div class="zone-label">Zone 2</div>
+          <div class="zone-name">Épargne & Objectifs</div>
+          <div class="zone-meta">
+            <span class="zone-modules">10 modules</span>
+            <div class="zone-progress-mini"><div class="zone-progress-fill" style="width:40%; background:#6366f1;"></div></div>
+            <span style="font-size:11px; color:#6366f1; font-weight:700;">40%</span>
+          </div>
+        </div>
+        <span class="zone-chevron open">▼</span>
+      </div>
+      <div class="zone-modules-list">
+        <div class="module-row">
+          <div class="module-row-icon" style="background:#dbeafe;">🎯</div>
+          <div class="module-row-info">
+            <div class="module-row-title">Fixer ses objectifs financiers</div>
+            <div class="module-row-meta">
+              <span class="diff-badge diff-beginner">Débutant</span>
+              <span class="module-row-duration">⏱ 8 min</span>
+            </div>
+          </div>
+          <div class="module-row-status"><div class="status-done">✅</div></div>
+        </div>
+        <div class="module-row">
+          <div class="module-row-icon" style="background:#fce7f3;">📈</div>
+          <div class="module-row-info">
+            <div class="module-row-title">L'épargne de précaution</div>
+            <div class="module-row-meta">
+              <span class="diff-badge diff-intermediate">Intermédiaire</span>
+              <span class="module-row-duration">⏱ 10 min</span>
+            </div>
+          </div>
+          <div class="module-row-status"><div class="status-progress">65%</div></div>
+        </div>
+        <div class="module-row">
+          <div class="module-row-icon" style="background:#fef3c7;">🏡</div>
+          <div class="module-row-info">
+            <div class="module-row-title">Épargner pour l'achat immobilier</div>
+            <div class="module-row-meta">
+              <span class="diff-badge diff-intermediate">Intermédiaire</span>
+              <span class="module-row-duration">⏱ 12 min</span>
+            </div>
+          </div>
+          <div class="module-row-status"><div class="status-play">▶</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone 3 — Investissement (verrouillée) -->
+    <div class="zone-card locked">
+      <div class="zone-header">
+        <div class="zone-icon" style="background:#f1f5f9;">📊</div>
+        <div class="zone-info">
+          <div class="zone-label">Zone 3</div>
+          <div class="zone-name">Investissement</div>
+          <div class="zone-meta">
+            <span class="zone-modules">12 modules</span>
+          </div>
+        </div>
+        <div class="zone-locked-badge">🔒 Niv. 10</div>
+      </div>
+    </div>
+
+    <!-- Zone 4 — Locked -->
+    <div class="zone-card locked">
+      <div class="zone-header">
+        <div class="zone-icon" style="background:#f1f5f9;">🏦</div>
+        <div class="zone-info">
+          <div class="zone-label">Zone 4</div>
+          <div class="zone-name">Crédit & Dettes</div>
+          <div class="zone-meta">
+            <span class="zone-modules">9 modules</span>
+          </div>
+        </div>
+        <div class="zone-locked-badge">🔒 Niv. 15</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-item">
+      <div class="tab-icon">🏠</div>
+      <div class="tab-label">Accueil</div>
+    </div>
+    <div class="tab-item active">
+      <div class="tab-icon">📚</div>
+      <div class="tab-label" style="color:#6366f1;">Apprendre</div>
+      <div class="tab-active-pill"></div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">⚡</div>
+      <div class="tab-label">Défi</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">🏅</div>
+      <div class="tab-label">Badges</div>
+    </div>
+    <div class="tab-item">
+      <div class="tab-icon">👤</div>
+      <div class="tab-label">Profil</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

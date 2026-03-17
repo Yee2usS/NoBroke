@@ -10,6 +10,12 @@ export interface ProfileData {
   objective: string;
 }
 
+export interface QuickWinsData {
+  objectives: string[];
+  hasIdeas: boolean;
+  selectedActions: string[];
+}
+
 export interface QuizResult {
   score: number;
   level: number;
@@ -22,15 +28,20 @@ export interface QuizResult {
  */
 export const saveProfileData = async (
   userId: string,
-  profileData: ProfileData
+  profileData: ProfileData,
+  quickWinsData?: QuickWinsData | null
 ): Promise<void> => {
+  const updates: Record<string, unknown> = {
+    age_range: profileData.age,
+    income_range: profileData.income,
+    financial_objective: profileData.objective,
+  };
+  if (quickWinsData) {
+    updates.onboarding_quick_wins = quickWinsData;
+  }
   const { error } = await supabase
     .from('profiles')
-    .update({
-      age_range: profileData.age,
-      income_range: profileData.income,
-      financial_objective: profileData.objective,
-    })
+    .update(updates)
     .eq('id', userId);
 
   if (error) throw error;

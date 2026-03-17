@@ -8,12 +8,17 @@ import {
   Modal,
   Animated,
   ActivityIndicator,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { useDailyChoice } from '@/hooks/useDailyChoice';
-import { useXP } from '@/hooks/useXP'; // 🆕 Ajout
+import { useXP } from '@/hooks/useXP';
+import { useWalletStore } from '@/store/useWalletStore';
+import { useStatsStore } from '@/store/useStatsStore';
+import { useUserStore } from '@/store/useUserStore';
+import { useGameStore } from '@/store/useGameStore';
+import { checkAndAwardBadges } from '@/services/badgeService';
 import ChoiceCard from '@/components/ChoiceCard';
 
 type ScreenStep = 'loading' | 'selection' | 'consequences' | 'lesson';
@@ -33,7 +38,11 @@ const DailyChoiceScreen: React.FC = () => {
     submitChoice,
   } = useDailyChoice();
   
-  const { refreshLevelInfo } = useXP(); // 🆕 Hook pour rafraîchir les XP
+  const { refreshLevelInfo } = useXP();
+  const { applyTransaction, balance } = useWalletStore();
+  const { addStats } = useStatsStore();
+  const { user, progress } = useUserStore();
+  const { fetchUserBadges } = useGameStore();
 
   const [currentStep, setCurrentStep] = useState<ScreenStep>('loading');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -78,9 +87,32 @@ const DailyChoiceScreen: React.FC = () => {
     if (result) {
       setLocalConsequences(result);
       setCurrentStep('consequences');
-      
-      // 🆕 Rafraîchir les données XP depuis Supabase
+
+      // Mettre à jour la cagnotte virtuelle
+      if (result.moneyDelta !== undefined && result.moneyDelta !== 0 && result.scenarioId && result.date) {
+        applyTransaction(
+          result.moneyDelta,
+          result.situationTitle ?? 'Choix du jour',
+          result.scenarioId,
+          result.date
+        );
+      }
+
+      // Mettre à jour les stats (discipline, créativité, prudence)
+      if (result.consequences?.stats) {
+        addStats(result.consequences.stats);
+      }
+
       await refreshLevelInfo();
+
+      // Vérifier les badges (cagnotte mise à jour)
+      const newBalance = useWalletStore.getState().balance;
+      const level = progress?.level ?? 1;
+      if (user?.id) {
+        checkAndAwardBadges(user.id, level, newBalance).then(({ awarded }) => {
+          if (awarded.length > 0) fetchUserBadges();
+        });
+      }
       
       // Animer les compteurs
       Animated.parallel([
@@ -210,7 +242,7 @@ const DailyChoiceScreen: React.FC = () => {
               <View style={styles.countersContainer}>
                 {/* Argent */}
                 <View style={styles.counterCard}>
-                  <Text style={styles.counterLabel}>Argent</Text>
+                  <Text style={styles.counterLabel}>Impact argent</Text>
                   <Animated.Text
                     style={[
                       styles.counterValue,
@@ -229,6 +261,14 @@ const DailyChoiceScreen: React.FC = () => {
                     +{localConsequences.consequences.xp} XP
                   </Animated.Text>
                 </View>
+              </View>
+
+              {/* Solde cagnotte actuel */}
+              <View style={styles.walletBanner}>
+                <Text style={styles.walletBannerLabel}>💰 Ta cagnotte virtuelle</Text>
+                <Text style={styles.walletBannerBalance}>
+                  {balance.toLocaleString('fr-FR')} €
+                </Text>
               </View>
 
               {/* Stats (si présentes) */}
@@ -540,6 +580,28 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  walletBanner: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f0fdf4',
+    borderWidth: 1,
+    borderColor: '#86efac',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 16,
+  },
+  walletBannerLabel: {
+    fontSize: 14,
+    color: '#166534',
+    fontWeight: '600',
+  },
+  walletBannerBalance: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#15803d',
   },
   explanationCard: {
     backgroundColor: '#FEF3C7',

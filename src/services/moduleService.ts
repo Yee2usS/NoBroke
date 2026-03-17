@@ -1,15 +1,18 @@
 import { supabase } from './supabase';
 import { awardXP } from './xpService';
+import { getXPReward } from '@/utils/xpCalculator';
 import {
   saveLocalModuleProgress,
   getLocalModuleProgress,
 } from './moduleProgressLocalService';
 import { MODULES, getModuleById as getModuleFromData } from '@/data/modulesData';
+import { ZONES } from '@/data/zones';
 import {
   Module,
   ModuleWithProgress,
   UserModuleProgress,
   ModuleCompletionResult,
+  LockReason,
 } from '@/types/module.types';
 
 /**
@@ -56,7 +59,19 @@ export const getModules = async (
     // 3. Récupérer la progression locale (IDs custom)
     const localProgress = await getLocalModuleProgress(userId);
 
-    // 4. Enrichir les modules avec la progression (Supabase + local)
+    // 4. Construire un index trié des modules par zone (pour le verrouillage séquentiel)
+    const modulesByZone: Record<number, Module[]> = {};
+    MODULES.forEach((m) => {
+      if (!modulesByZone[m.zone]) modulesByZone[m.zone] = [];
+      modulesByZone[m.zone].push(m);
+    });
+    Object.values(modulesByZone).forEach((zoneModules) =>
+      zoneModules.sort((a, b) => a.orderInZone - b.orderInZone)
+    );
+
+    const isPremiumUser = subscriptionTier === 'premium' || subscriptionTier === 'pro';
+
+    // 5. Enrichir les modules avec la progression (Supabase + local)
     const modulesWithProgress: ModuleWithProgress[] = MODULES.map((module) => {
       const dbProgress = progressMap[module.id];
       const local = localProgress[module.id];
@@ -68,14 +83,42 @@ export const getModules = async (
             completedAt: local.completedAt,
           }
         : dbProgress;
-      const locked = userLevel < module.levelRequired;
-      const premiumLocked = module.isPremium && subscriptionTier === 'free';
+
+      // — Vérification accès zone par niveau —
+      const zone = ZONES.find((z) => z.id === module.zone);
+      const zoneAccessible = !zone || userLevel >= zone.levelRequired;
+
+      let locked = false;
+      let lockReason: LockReason | undefined;
+
+      if (!zoneAccessible) {
+        // La zone entière est verrouillée par le niveau
+        locked = true;
+        lockReason = 'zone_level';
+      } else if (module.orderInZone > 1) {
+        // Vérifier que le module précédent est complété (déverrouillage séquentiel)
+        const zoneModules = modulesByZone[module.zone] ?? [];
+        const prevModule = zoneModules.find((m) => m.orderInZone === module.orderInZone - 1);
+        if (prevModule) {
+          const prevLocal = localProgress[prevModule.id];
+          const prevDb = progressMap[prevModule.id];
+          const prevCompleted = prevLocal?.completed || prevDb?.completed || false;
+          if (!prevCompleted) {
+            locked = true;
+            lockReason = 'sequential';
+          }
+        }
+      }
+
+      // isPremium bloque uniquement les utilisateurs free (premium/pro accèdent à 100% des modules)
+      const premiumLocked = module.isPremium && !isPremiumUser;
 
       return {
         ...module,
         progress,
         locked,
         premiumLocked,
+        lockReason: premiumLocked ? 'premium' : lockReason,
       };
     });
 
@@ -163,9 +206,13 @@ export const getModuleById = async (
 
     const userLevel = profileData.level;
     const subscriptionTier = profileData.subscription_tier || 'free';
+    const isPremiumUser = subscriptionTier === 'premium' || subscriptionTier === 'pro';
 
-    const locked = userLevel < moduleData.levelRequired;
-    const premiumLocked = moduleData.isPremium && subscriptionTier === 'free';
+    // Vérification zone accessible par niveau
+    const zone = ZONES.find((z) => z.id === moduleData.zone);
+    const zoneAccessible = !zone || userLevel >= zone.levelRequired;
+    const locked = !zoneAccessible;
+    const premiumLocked = moduleData.isPremium && !isPremiumUser;
 
     return {
       success: true,
@@ -174,6 +221,7 @@ export const getModuleById = async (
         progress,
         locked,
         premiumLocked,
+        lockReason: premiumLocked ? 'premium' : (locked ? 'zone_level' : undefined),
       },
     };
   } catch (error: any) {
@@ -218,29 +266,28 @@ export const canAccessModule = async (
 
     const userLevel = profileData.level;
     const subscriptionTier = profileData.subscription_tier || 'free';
+    const isPremiumUser = subscriptionTier === 'premium' || subscriptionTier === 'pro';
 
-    // Check niveau
-    if (userLevel < moduleData.levelRequired) {
+    // Vérification zone accessible par niveau
+    const zone = ZONES.find((z) => z.id === moduleData.zone);
+    if (zone && userLevel < zone.levelRequired) {
       return {
         success: true,
         canAccess: false,
-        reason: `Niveau ${moduleData.levelRequired} requis (tu es niveau ${userLevel})`,
+        reason: `Zone accessible au niveau ${zone.levelRequired} (tu es niveau ${userLevel})`,
       };
     }
 
-    // Check premium
-    if (moduleData.isPremium && subscriptionTier === 'free') {
+    // Vérification premium — uniquement pour les utilisateurs free
+    if (moduleData.isPremium && !isPremiumUser) {
       return {
         success: true,
         canAccess: false,
-        reason: 'Abonnement Premium requis',
+        reason: 'Abonnement Premium requis pour accéder à ce module',
       };
     }
 
-    return {
-      success: true,
-      canAccess: true,
-    };
+    return { success: true, canAccess: true };
   } catch (error: any) {
     console.error('Erreur canAccessModule:', error);
     return {
@@ -307,9 +354,10 @@ export const completeModule = async (
 
     return {
       success: true,
-      xpGained: moduleData.xpReward,
+      xpGained: getXPReward('module'),
       leveledUp: xpResult.leveledUp,
-      newLevel: xpResult.leveledUp ? xpResult.newLevel : undefined,
+      newLevel: xpResult.newLevel,
+      newTotalXP: xpResult.newTotalXP,
     };
   } catch (error: any) {
     console.error('Erreur completeModule:', error);

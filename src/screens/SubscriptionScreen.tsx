@@ -21,7 +21,7 @@ import { SubscriptionTier, SubscriptionPlan } from '@/types';
  */
 const SubscriptionScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const { subscription, refresh } = useSubscription();
   const [loading, setLoading] = useState(false);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -115,6 +115,11 @@ const SubscriptionScreen: React.FC = () => {
     const result = await upgradeSubscription(user!.id, tier);
 
     if (result.success) {
+      // Mettre à jour le store local immédiatement
+      if (user) {
+        setUser({ ...user, subscription_tier: tier });
+      }
+      // Rafraîchir aussi le hook useSubscription
       await refresh();
       Alert.alert(
         'Succès ! 🎉',

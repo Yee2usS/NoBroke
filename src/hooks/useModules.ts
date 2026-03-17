@@ -7,21 +7,21 @@ import {
   getUserModuleStats,
 } from '@/services/moduleService';
 import { ModuleWithProgress } from '@/types/module.types';
+import { SubscriptionTier } from '@/types';
 import { Alert } from 'react-native';
 
 /**
  * Hook personnalisé pour gérer les modules
+ * subscriptionTier est passé depuis l'extérieur pour éviter les problèmes
+ * de synchronisation entre instances de useSubscription
  */
-export const useModules = () => {
-  const { user, progress } = useUserStore();
+export const useModules = (subscriptionTier: SubscriptionTier = 'free') => {
+  const { user, progress, updateProgress } = useUserStore();
   const [modules, setModules] = useState<ModuleWithProgress[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<any>(null);
 
-  /**
-   * Charge tous les modules
-   */
   const loadModules = useCallback(async () => {
     if (!user?.id || !progress) return;
 
@@ -29,7 +29,6 @@ export const useModules = () => {
     setError(null);
 
     try {
-      const subscriptionTier = (user as any).subscription_tier || 'free';
       const result = await getModules(user.id, progress.level, subscriptionTier);
 
       if (result.success) {
@@ -43,11 +42,8 @@ export const useModules = () => {
     } finally {
       setLoading(false);
     }
-  }, [user, progress]);
+  }, [user, progress, subscriptionTier]);
 
-  /**
-   * Charge les stats de progression
-   */
   const loadStats = useCallback(async () => {
     if (!user?.id) return;
 
@@ -61,9 +57,6 @@ export const useModules = () => {
     }
   }, [user]);
 
-  /**
-   * Récupère les modules d'une zone spécifique
-   */
   const getModulesByZone = useCallback(
     (zoneId: number): ModuleWithProgress[] => {
       return modules
@@ -73,18 +66,13 @@ export const useModules = () => {
     [modules]
   );
 
-  /**
-   * Récupère un module par son ID
-   */
   const getModule = useCallback(
     async (moduleId: string) => {
       if (!user?.id) return null;
 
       try {
         const result = await getModuleById(moduleId, user.id);
-        if (result.success) {
-          return result.module;
-        }
+        if (result.success) return result.module;
         return null;
       } catch (err: any) {
         console.error('Erreur getModule:', err);
@@ -94,9 +82,6 @@ export const useModules = () => {
     [user]
   );
 
-  /**
-   * Complète un module
-   */
   const handleCompleteModule = useCallback(
     async (moduleId: string, quizScore: number) => {
       if (!user?.id) {
@@ -108,11 +93,18 @@ export const useModules = () => {
         const result = await completeModule(user.id, moduleId, quizScore);
 
         if (result.success) {
-          // Recharger les modules et stats
+          // Mettre à jour la barre XP du dashboard immédiatement
+          if (result.newTotalXP !== undefined && result.newLevel !== undefined) {
+            const completedCount = (progress?.total_modules_completed ?? 0) + 1;
+            updateProgress({
+              xp: result.newTotalXP,
+              level: result.newLevel,
+              total_modules_completed: completedCount,
+            });
+          }
           await loadModules();
           await loadStats();
 
-          // Afficher une notification de level up si nécessaire
           if (result.leveledUp) {
             Alert.alert(
               'Level Up ! 🎉',
@@ -131,23 +123,20 @@ export const useModules = () => {
         return null;
       }
     },
-    [user, loadModules, loadStats]
+    [user, progress, loadModules, loadStats, updateProgress]
   );
 
-  // Charger au montage
+  // Re-charge automatiquement quand subscriptionTier change
   useEffect(() => {
     loadModules();
     loadStats();
   }, [loadModules, loadStats]);
 
   return {
-    // État
     modules,
     loading,
     error,
     stats,
-
-    // Actions
     getModulesByZone,
     getModule,
     completeModule: handleCompleteModule,

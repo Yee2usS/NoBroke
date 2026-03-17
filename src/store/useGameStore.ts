@@ -78,7 +78,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           badge:badges(*)
         `)
         .eq('user_id', userId)
-        .order('earned_at', { ascending: false });
+        .order('unlocked_at', { ascending: false });
 
       if (error) throw error;
       set({ userBadges: data || [], isLoading: false });
@@ -152,8 +152,8 @@ export const useGameStore = create<GameState>((set, get) => ({
         const currentProgress = useUserStore.getState().progress;
         if (currentProgress) {
           useUserStore.getState().updateProgress({
-            xp: currentProgress.xp + module.xp_reward,
-            total_modules_completed: currentProgress.total_modules_completed + 1,
+            xp: (Number(currentProgress.xp) || 0) + module.xp_reward,
+            total_modules_completed: (currentProgress.total_modules_completed ?? 0) + 1,
           });
         }
       }
@@ -195,7 +195,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         const currentProgress = useUserStore.getState().progress;
         if (currentProgress) {
           useUserStore.getState().updateProgress({
-            xp: currentProgress.xp + dailyChoice.xp_reward,
+            xp: (Number(currentProgress.xp) || 0) + dailyChoice.xp_reward,
           });
         }
       }
